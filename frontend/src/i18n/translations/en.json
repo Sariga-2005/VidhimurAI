@@ -1,0 +1,61 @@
+{
+    "header": {
+        "brand": "VidhimurAI",
+        "tagline": "Legal Intelligence",
+        "nav": {
+            "about": "About",
+            "features": "Features",
+            "useCases": "Use Cases",
+            "getStarted": "Get Started"
+        },
+        "menu": "MENU"
+    },
+    "hero": {
+        "headline1": "Justice, Accessible",
+        "headline2": "to Every Citizen",
+        "subheadline": "Empowering legal research and citizen rights with AI-driven case analysis, precedent intelligence, and actionable legal guidance.",
+        "cta1": "Enter Legal Research",
+        "cta2": "Seek Legal Empowerment"
+    },
+    "about": {
+        "label": "About the Platform",
+        "heading1": "Bridging Law &",
+        "heading2": "Technology",
+        "description": "VidhimurAI is an AI-powered legal intelligence platform designed to make India's legal ecosystem transparent, navigable, and empowering for every citizen.",
+        "pillars": {
+            "access": "Access",
+            "intelligence": "Intelligence",
+            "empowerment": "Empowerment"
+        }
+    },
+    "features": {
+        "label": "Platform Features",
+        "heading1": "Powerful Tools for",
+        "heading2": "Legal Intelligence",
+        "description": "Two distinct modes — Research and Empower — provide comprehensive legal support from case discovery to actionable guidance.",
+        "items": {
+            "research": "Research Mode",
+            "empower": "Empower Mode",
+            "rankings": "Case Rankings",
+            "strength": "Legal Strength",
+            "roadmap": "Action Roadmap",
+            "draft": "Draft Generation"
+        }
+    },
+    "useCases": {
+        "label": "Who Benefits",
+        "heading1": "Built for",
+        "heading2": "Everyone",
+        "description": "Whether you're a citizen seeking clarity, a lawyer preparing arguments, or a student studying law — VidhimurAI is designed for you.",
+        "items": {
+            "citizens": "Citizens",
+            "lawyers": "Lawyers & Advocates",
+            "students": "Law Students",
+            "ngos": "NGOs & Legal Aid"
+        }
+    },
+    "footer": {
+        "copyright": "© {year} VidhimurAI. All rights reserved. This platform is for informational purposes only and does not constitute legal advice.",
+        "madeIn": "🇮🇳 Made in India"
+    }
+}
