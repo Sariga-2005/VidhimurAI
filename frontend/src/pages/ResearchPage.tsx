@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { searchCases } from '../services/api'
 import type { CaseResult, SearchResponse, SearchFilters } from '../services/api'
 import { useTranslation } from '../i18n/useTranslation'
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition'
 
 const ResearchPage = () => {
     const { t } = useTranslation()
@@ -14,6 +15,11 @@ const ResearchPage = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [showFilters, setShowFilters] = useState(false)
+
+    const onVoiceResult = useCallback((text: string) => {
+        setQuery(prev => prev ? prev + ' ' + text : text)
+    }, [])
+    const { isListening, toggleListening, isSupported } = useSpeechRecognition(onVoiceResult)
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -48,8 +54,8 @@ const ResearchPage = () => {
         <div
             key={`${c.case_name}-${index}`}
             className={`group relative rounded-xl border p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${isInfluential
-                    ? 'bg-gradient-to-br from-brand/5 via-white to-blue-50 border-brand/30 shadow-md ring-1 ring-brand/10'
-                    : 'bg-white border-official-200 hover:border-brand/20'
+                ? 'bg-gradient-to-br from-brand/5 via-white to-blue-50 border-brand/30 shadow-md ring-1 ring-brand/10'
+                : 'bg-white border-official-200 hover:border-brand/20'
                 }`}
         >
             {isInfluential && (
@@ -148,6 +154,22 @@ const ResearchPage = () => {
                                     placeholder={t('research.placeholder')}
                                     className="flex-1 px-4 py-4 text-base text-official-900 placeholder:text-official-400 focus:outline-none bg-transparent"
                                 />
+                                {isSupported && (
+                                    <button
+                                        type="button"
+                                        onClick={toggleListening}
+                                        className={`flex items-center justify-center px-3 transition-all duration-300 ${isListening
+                                                ? 'text-red-500 animate-pulse'
+                                                : 'text-official-400 hover:text-brand'
+                                            }`}
+                                        title={isListening ? 'Stop listening' : 'Voice input'}
+                                    >
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                                        </svg>
+                                    </button>
+                                )}
                                 <button
                                     type="submit"
                                     disabled={loading || !query.trim()}
