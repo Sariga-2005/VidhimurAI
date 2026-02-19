@@ -41,6 +41,7 @@ class SearchRequest(BaseModel):
 
     query: str = Field(..., min_length=1, description="Legal search query")
     filters: SearchFilters | None = None
+    lang: str = Field(default="en", description="UI language code for translation")
 
 
 class EmpowerRequest(BaseModel):
@@ -48,6 +49,7 @@ class EmpowerRequest(BaseModel):
 
     query: str = Field(..., min_length=1, description="Citizen's legal issue description")
     context: str | None = None
+    lang: str = Field(default="en", description="UI language code for translation")
 
 
 # ═══════════════════════════════════════════════════════════════════════════

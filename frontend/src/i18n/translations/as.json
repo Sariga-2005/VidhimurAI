@@ -77,6 +77,9 @@
         "mostInfluential": "আটাইতকৈ প্ৰভাৱশালী",
         "authority": "কৰ্তৃত্ব",
         "relevance": "প্ৰাসংগিকতা",
+        "score": "স্ক'ৰ",
+        "citations": "উদ্ধৃতি",
+        "viewOnKanoon": "ইণ্ডিয়ান কানুনত চাওক →",
         "noResults": "কোনো গোচৰ পোৱা নগ'ল. বেলেগ শব্দ চেষ্টা কৰক.",
         "emptyState": "সম্পৰ্কীয় গোচৰ বিচাৰিবলৈ আইনী প্ৰশ্ন দাখিল কৰক"
     },
@@ -94,6 +97,11 @@
         "relevantSections": "সম্পৰ্কীয় আইনী ধাৰা",
         "precedents": "সহায়ক নজিৰ",
         "actionRoadmap": "কাৰ্য ৰ'ডমেপ",
+        "score": "স্ক'ৰ",
+        "viewOnKanoon": "ইণ্ডিয়ান কানুনত চাওক →",
+        "strengthStrong": "শক্তিশালী",
+        "strengthModerate": "মধ্যমীয়া",
+        "strengthWeak": "দুৰ্বল",
         "emptyState": "সৱলীকৰণ বিশ্লেষণ পাবলৈ আপোনাৰ আইনী সমস্যা বৰ্ণনা কৰক"
     }
 }

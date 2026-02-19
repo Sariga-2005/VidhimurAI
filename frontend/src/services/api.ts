@@ -32,9 +32,10 @@ export interface EmpowerResponse {
     action_steps: string[];
 }
 
-export async function searchCases(query: string, filters?: SearchFilters): Promise<SearchResponse> {
-    const body: { query: string; filters?: SearchFilters } = { query };
+export async function searchCases(query: string, filters?: SearchFilters, lang?: string): Promise<SearchResponse> {
+    const body: { query: string; filters?: SearchFilters; lang?: string } = { query };
     if (filters) body.filters = filters;
+    if (lang) body.lang = lang;
 
     const res = await fetch(`${API_BASE}/research/search`, {
         method: 'POST',
@@ -49,9 +50,10 @@ export async function searchCases(query: string, filters?: SearchFilters): Promi
     return res.json();
 }
 
-export async function analyzeEmpowerment(query: string, context?: string): Promise<EmpowerResponse> {
-    const body: { query: string; context?: string } = { query };
+export async function analyzeEmpowerment(query: string, context?: string, lang?: string): Promise<EmpowerResponse> {
+    const body: { query: string; context?: string; lang?: string } = { query };
     if (context) body.context = context;
+    if (lang) body.lang = lang;
 
     const res = await fetch(`${API_BASE}/empower/analyze`, {
         method: 'POST',

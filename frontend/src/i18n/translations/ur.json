@@ -77,6 +77,9 @@
         "mostInfluential": "سب سے بااثر",
         "authority": "اتھارٹی",
         "relevance": "مطابقت",
+        "score": "اسکور",
+        "citations": "حوالے",
+        "viewOnKanoon": "انڈین کانون پر دیکھیں →",
         "noResults": "کوئی کیس نہیں ملا۔ مختلف الفاظ آزمائیں۔",
         "emptyState": "متعلقہ کیسز تلاش کرنے کے لیے قانونی سوال درج کریں"
     },
@@ -94,6 +97,11 @@
         "relevantSections": "متعلقہ قانونی دفعات",
         "precedents": "معاون نظائر",
         "actionRoadmap": "عمل روڈمیپ",
+        "score": "اسکور",
+        "viewOnKanoon": "انڈین کانون پر دیکھیں →",
+        "strengthStrong": "مضبوط",
+        "strengthModerate": "معتدل",
+        "strengthWeak": "کمزور",
         "emptyState": "بااختیاری تجزیہ حاصل کرنے کے لیے اپنا قانونی مسئلہ بیان کریں"
     }
 }

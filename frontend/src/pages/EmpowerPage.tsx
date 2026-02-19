@@ -7,7 +7,7 @@ import { useSpeechRecognition } from '../hooks/useSpeechRecognition'
 import LanguageSelector from '../components/ui/LanguageSelector'
 
 const EmpowerPage = () => {
-    const { t } = useTranslation()
+    const { t, language } = useTranslation()
     const [query, setQuery] = useState('')
     const [context, setContext] = useState('')
     const [results, setResults] = useState<EmpowerResponse | null>(null)
@@ -28,7 +28,7 @@ const EmpowerPage = () => {
         setResults(null)
 
         try {
-            const data = await analyzeEmpowerment(query, context || undefined)
+            const data = await analyzeEmpowerment(query, context || undefined, language)
             setResults(data)
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -50,13 +50,13 @@ const EmpowerPage = () => {
                 <span className="px-2 py-0.5 rounded-md bg-official-100 text-official-600 text-xs font-medium">🏛️ {c.court}</span>
                 <span className="px-2 py-0.5 rounded-md bg-official-100 text-official-600 text-xs font-medium">📅 {c.year}</span>
                 <span className={`px-2 py-0.5 rounded-md border text-xs font-bold ${c.strength_score >= 70 ? 'text-emerald-600 bg-emerald-50 border-emerald-200' : c.strength_score >= 40 ? 'text-amber-600 bg-amber-50 border-amber-200' : 'text-red-500 bg-red-50 border-red-200'}`}>
-                    Score: {c.strength_score.toFixed(1)}
+                    {t('empower.score')}: {c.strength_score.toFixed(1)}
                 </span>
             </div>
             <p className="text-sm text-official-500 leading-relaxed line-clamp-2">{c.summary}</p>
             {c.kanoon_tid && (
                 <a href={`https://indiankanoon.org/doc/${c.kanoon_tid}/`} target="_blank" rel="noopener noreferrer" className="inline-block mt-3 text-xs text-brand hover:text-brand-dark font-medium transition-colors">
-                    View on Indian Kanoon →
+                    {t('empower.viewOnKanoon')}
                 </a>
             )}
         </div>
@@ -180,7 +180,7 @@ const EmpowerPage = () => {
                                 <p className="text-xs font-semibold uppercase tracking-wider mb-2 opacity-70">{t('empower.legalStrength')}</p>
                                 <div className="flex items-center gap-3">
                                     <span className="text-2xl">{strengthConfig[results.legal_strength].icon}</span>
-                                    <span className="text-xl font-bold">{results.legal_strength}</span>
+                                    <span className="text-xl font-bold">{t(`empower.strength${results.legal_strength}`)}</span>
                                 </div>
                                 <div className="mt-3 h-2 rounded-full bg-black/10 overflow-hidden">
                                     <div className={`h-full rounded-full transition-all duration-700 ${strengthConfig[results.legal_strength].bar} ${strengthConfig[results.legal_strength].width}`}></div>

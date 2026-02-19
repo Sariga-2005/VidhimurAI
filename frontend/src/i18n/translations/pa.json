@@ -77,6 +77,9 @@
         "mostInfluential": "ਸਭ ਤੋਂ ਪ੍ਰਭਾਵਸ਼ਾਲੀ",
         "authority": "ਅਧਿਕਾਰ",
         "relevance": "ਸੰਬੰਧਤ",
+        "score": "ਸਕੋਰ",
+        "citations": "ਹਵਾਲੇ",
+        "viewOnKanoon": "ਇੰਡੀਅਨ ਕਾਨੂੰਨ ਤੇ ਦੇਖੋ →",
         "noResults": "ਕੋਈ ਕੇਸ ਨਹੀਂ ਮਿਲਿਆ. ਵੱਖਰੇ ਸ਼ਬਦ ਅਜ਼ਮਾਓ.",
         "emptyState": "ਸੰਬੰਧਤ ਕੇਸ ਲੱਭਣ ਲਈ ਕਾਨੂੰਨੀ ਸਵਾਲ ਦਰਜ ਕਰੋ"
     },
@@ -94,6 +97,11 @@
         "relevantSections": "ਸੰਬੰਧਤ ਕਾਨੂੰਨੀ ਧਾਰਾਵਾਂ",
         "precedents": "ਸਹਾਇਕ ਮਿਸਾਲਾਂ",
         "actionRoadmap": "ਕਾਰਜ ਰੋਡਮੈਪ",
+        "score": "ਸਕੋਰ",
+        "viewOnKanoon": "ਇੰਡੀਅਨ ਕਾਨੂੰਨ ਤੇ ਦੇਖੋ →",
+        "strengthStrong": "ਮਜ਼ਬੂਤ",
+        "strengthModerate": "ਮੱਧਮ",
+        "strengthWeak": "ਕਮਜ਼ੋਰ",
         "emptyState": "ਸਸ਼ਕਤੀਕਰਨ ਵਿਸ਼ਲੇਸ਼ਣ ਲਈ ਆਪਣੀ ਕਾਨੂੰਨੀ ਸਮੱਸਿਆ ਦੱਸੋ"
     }
 }

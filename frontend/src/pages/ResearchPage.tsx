@@ -7,7 +7,7 @@ import { useSpeechRecognition } from '../hooks/useSpeechRecognition'
 import LanguageSelector from '../components/ui/LanguageSelector'
 
 const ResearchPage = () => {
-    const { t } = useTranslation()
+    const { t, language } = useTranslation()
     const [query, setQuery] = useState('')
     const [court, setCourt] = useState('')
     const [yearStart, setYearStart] = useState('')
@@ -36,7 +36,8 @@ const ResearchPage = () => {
             if (yearStart) filters.year_start = parseInt(yearStart)
             if (yearEnd) filters.year_end = parseInt(yearEnd)
 
-            const data = await searchCases(query, Object.keys(filters).length > 0 ? filters : undefined)
+            const hasFilters = Object.keys(filters).length > 0
+            const data = await searchCases(query, hasFilters ? filters : undefined, language)
             setResults(data)
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -78,7 +79,7 @@ const ResearchPage = () => {
                             📅 {c.year}
                         </span>
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-official-100 text-official-600 text-xs font-medium">
-                            📚 {c.citation_count} citations
+                            📚 {c.citation_count} {t('research.citations')}
                         </span>
                     </div>
                 </div>
@@ -105,7 +106,7 @@ const ResearchPage = () => {
                         rel="noopener noreferrer"
                         className="ml-auto text-xs text-brand hover:text-brand-dark font-medium transition-colors"
                     >
-                        View on Indian Kanoon →
+                        {t('research.viewOnKanoon')}
                     </a>
                 )}
             </div>

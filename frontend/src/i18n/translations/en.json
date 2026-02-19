@@ -77,6 +77,9 @@
         "mostInfluential": "Most Influential",
         "authority": "Authority",
         "relevance": "Relevance",
+        "score": "Score",
+        "citations": "citations",
+        "viewOnKanoon": "View on Indian Kanoon →",
         "noResults": "No cases matched your query. Try different keywords.",
         "emptyState": "Enter a legal query to search relevant cases"
     },
@@ -94,6 +97,11 @@
         "relevantSections": "Relevant Legal Sections",
         "precedents": "Supporting Precedents",
         "actionRoadmap": "Action Roadmap",
+        "score": "Score",
+        "viewOnKanoon": "View on Indian Kanoon →",
+        "strengthStrong": "Strong",
+        "strengthModerate": "Moderate",
+        "strengthWeak": "Weak",
         "emptyState": "Describe your legal issue to get empowerment analysis"
     }
 }
