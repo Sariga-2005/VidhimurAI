@@ -77,6 +77,9 @@
         "mostInfluential": "સૌથી પ્રભાવશાળી",
         "authority": "અધિકાર",
         "relevance": "સુસંગતતા",
+        "score": "સ્કોર",
+        "citations": "ઉદ્ધરણો",
+        "viewOnKanoon": "ઇન્ડિયન કાનૂન પર જુઓ →",
         "noResults": "કોઈ કેસ મળ્યો નહીં. જુદા શબ્દો અજમાવો.",
         "emptyState": "સંબંધિત કેસો શોધવા કાનૂની પ્રશ્ન દાખલ કરો"
     },
@@ -94,6 +97,11 @@
         "relevantSections": "સંબંધિત કાનૂની કલમો",
         "precedents": "સહાયક દાખલાઓ",
         "actionRoadmap": "કાર્ય રોડમેપ",
+        "score": "સ્કોર",
+        "viewOnKanoon": "ઇન્ડિયન કાનૂન પર જુઓ →",
+        "strengthStrong": "મજબૂત",
+        "strengthModerate": "મધ્યમ",
+        "strengthWeak": "નબળું",
         "emptyState": "સશક્તિકરણ વિશ્લેષણ મેળવવા તમારી કાનૂની સમસ્યા વર્ણવો"
     }
 }
