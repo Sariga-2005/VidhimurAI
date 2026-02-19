@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { analyzeEmpowerment } from '../services/api'
-import type { EmpowerResponse, CaseResult } from '../services/api'
+import { analyzeEmpowerment, generateRoadmap } from '../services/api'
+import type { EmpowerResponse, CaseResult, RoadmapData } from '../services/api'
+import LegalTimeline from '../components/LegalTimeline'
 import { useTranslation } from '../i18n/useTranslation'
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition'
 import LanguageSelector from '../components/ui/LanguageSelector'
@@ -13,6 +14,8 @@ const EmpowerPage = () => {
     const [results, setResults] = useState<EmpowerResponse | null>(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const [roadmap, setRoadmap] = useState<RoadmapData | null>(null)
+    const [roadmapLoading, setRoadmapLoading] = useState(false)
 
     const onVoiceResult = useCallback((text: string) => {
         setQuery(prev => prev ? prev + ' ' + text : text)
@@ -26,10 +29,29 @@ const EmpowerPage = () => {
         setLoading(true)
         setError('')
         setResults(null)
+        setRoadmap(null)
 
         try {
             const data = await analyzeEmpowerment(query, context || undefined)
             setResults(data)
+
+            // Generate roadmap in background after analysis completes
+            setRoadmapLoading(true)
+            try {
+                const roadmapRes = await generateRoadmap({
+                    issue_type: data.issue_type,
+                    relevant_sections: data.relevant_sections,
+                    legal_strength: data.legal_strength,
+                    action_steps: data.action_steps,
+                })
+                if (roadmapRes.roadmap && typeof roadmapRes.roadmap === 'object') {
+                    setRoadmap(roadmapRes.roadmap)
+                }
+            } catch {
+                // Roadmap is optional; don't block the main results
+            } finally {
+                setRoadmapLoading(false)
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Something went wrong')
         } finally {
@@ -234,6 +256,21 @@ const EmpowerPage = () => {
                                     ))}
                                 </div>
                             </div>
+                        )}
+
+                        {/* Legal Strategy Timeline */}
+                        {roadmapLoading && (
+                            <div className="rounded-xl border border-official-200 bg-white p-6 shadow-sm">
+                                <h3 className="text-sm font-bold text-official-900 uppercase tracking-wider mb-4">Legal Strategy Timeline</h3>
+                                <div className="flex items-center gap-3 text-official-400">
+                                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                                    <span className="text-sm font-medium">Generating timeline...</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {roadmap && !roadmapLoading && (
+                            <LegalTimeline roadmap={roadmap} issueType={results.issue_type} legalStrength={results.legal_strength} />
                         )}
                     </div>
                 )}

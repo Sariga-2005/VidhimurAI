@@ -323,13 +323,10 @@ Each LLM-powered service (DraftGenerator, Simplifier, Translator, etc.) is a sta
 
 ## Team
 
-| Role | Name |
-|------|------|
-| Member 1 | ___________________ |
-| Member 2 | ___________________ |
-| Member 3 | ___________________ |
-| Member 4 | ___________________ |
+| Role | Name | Reg No |
+|------|------|--------|
+| Member 1 | Harshita R | CB.SC.U4CSE23028 |
+| Member 2 | Isha Sri Prakash | CB.SC.U4CSE23029 |
+| Member 3 | Sarigasini M | CB.SC.U4CSE23065 |
 
-## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

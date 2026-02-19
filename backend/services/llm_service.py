@@ -36,7 +36,8 @@ class LLMService:
     def generate_response(
         self,
         prompt: str,
-        system_role: str = "You are a helpful assistant."
+        system_role: str = "You are a helpful assistant.",
+        temperature: float = 0.2
     ) -> Optional[str]:
 
         if not self.client:
@@ -50,7 +51,7 @@ class LLMService:
                     {"role": "system", "content": system_role},
                     {"role": "user", "content": prompt}
                 ],
-                temperature=0.2
+                temperature=temperature
             )
 
             choice = completion.choices[0]
@@ -70,10 +71,11 @@ class LLMService:
     def generate_json_response(
         self,
         prompt: str,
-        system_role: str = "You are a helpful assistant."
+        system_role: str = "You are a helpful assistant.",
+        temperature: float = 0.2
     ) -> Optional[str]:
 
-        response = self.generate_response(prompt, system_role)
+        response = self.generate_response(prompt, system_role, temperature)
         if not response:
             return None
 
