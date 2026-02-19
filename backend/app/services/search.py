@@ -13,7 +13,7 @@ Pipeline:
 
 from __future__ import annotations
 
-from app.config import get_authority_tier, AUTHORITY_MIN_HIGH_TIER
+from app.config import get_authority_tier, AUTHORITY_MIN_HIGH_TIER, RELEVANCE_THRESHOLD
 from app.models.schemas import CaseRecord, CaseResult, SearchFilters, SearchResponse
 from app.services.ranking import compute_score, tokenize_query
 from app.services.query_normalizer import normalize_query
@@ -96,6 +96,20 @@ def search_cases(query: str, filters: SearchFilters | None = None) -> SearchResp
         scored.append((case, score, breakdown))
 
     scored.sort(key=lambda x: x[1], reverse=True)
+
+    # Layer 4b: Relevance-aware reranking
+    # Separate cases with meaningful relevance from authority-only cases.
+    # This prevents irrelevant landmark cases (high authority, 0 relevance)
+    # from pushing genuinely relevant cases out of the top results.
+    RESEARCH_RELEVANCE_MIN = 5.0
+    relevant = [(c, s, b) for c, s, b in scored if b.get("relevance_score", 0) >= RESEARCH_RELEVANCE_MIN]
+    authority_only = [(c, s, b) for c, s, b in scored if b.get("relevance_score", 0) < RESEARCH_RELEVANCE_MIN]
+
+    # Show relevant cases first, then backfill with authority-only cases
+    scored = relevant + authority_only
+
+    # Layer 4c: Relevance threshold — hide cases with near-zero relevance
+    scored = [(c, s, b) for c, s, b in scored if b.get("relevance_score", 0) >= RELEVANCE_THRESHOLD]
 
     # Layer 7: Build structured output
     top_cases: list[CaseResult] = []

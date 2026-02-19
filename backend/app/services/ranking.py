@@ -55,17 +55,10 @@ def compute_score(
     relevance_score = recency_b + relevance_s
 
     # ---- Mode-weighted final score ----
-    if mode == "empower":
-        # Relevance-Gated Authority: Authority only boosts if relevance is high.
-        # This prevents irrelevant landmark cases from dominating.
-        final_score = relevance_score + (authority_score * (relevance_score / 100.0))
-    else:
-        # Standard weighted sum for research
-        weights = SCORE_WEIGHTS.get(mode, SCORE_WEIGHTS["research"])
-        final_score = (
-            weights["authority"] * authority_score
-            + weights["relevance"] * relevance_score
-        )
+    # Relevance-Gated Authority: Authority only boosts proportionally to relevance.
+    # This prevents irrelevant landmark cases (high authority, 0 relevance)
+    # from dominating results in ANY mode.
+    final_score = relevance_score + (authority_score * (relevance_score / 100.0))
 
     breakdown = {
         "authority_score": round(authority_score, 2),
