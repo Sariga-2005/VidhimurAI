@@ -53,7 +53,15 @@ class LLMService:
                 temperature=0.2
             )
 
-            return completion.choices[0].message.content.strip()
+            choice = completion.choices[0]
+            logger.info(f"Groq finish_reason: {choice.finish_reason}")
+            content = choice.message.content
+            if not content:
+                logger.warning("Groq returned empty content.")
+                return ""
+            
+            logger.debug(f"Groq raw content: {content}")
+            return content.strip()
 
         except Exception as e:
             logger.error(f"Groq API Error: {str(e)}")
@@ -89,15 +97,25 @@ class LLMService:
             return cleaned
 
         except json.JSONDecodeError:
-            # Attempt to fix common issues like newlines in strings
+            # Attempt to fix common issues
             try:
-                # Replace literal newlines with space to make it valid JSON
-                # This sacrifices formatting slightly but ensures validity
-                fixed = cleaned.replace('\n', ' ').replace('\r', '')
+                # 1. Fix invalid escape for single quotes (\' -> ')
+                fixed = cleaned.replace("\\'", "'")
+                
+                # 2. Fix unescaped newlines (replace literal newline with \n char)
+                # We try to preserve structure by escaping them instead of removing
+                fixed = fixed.replace('\n', '\\n').replace('\r', '')
+                
                 json.loads(fixed)
                 return fixed
             except:
-                pass
+                # If that fails, try the destructive newline removal (fallback)
+                try:
+                    fixed = cleaned.replace("\\'", "'").replace('\n', ' ').replace('\r', '')
+                    json.loads(fixed)
+                    return fixed
+                except:
+                    pass
 
             logger.error(f"Invalid JSON returned from Groq. Raw Response: {response}")
             return None

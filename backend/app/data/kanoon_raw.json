@@ -1,0 +1,466 @@
+[
+    {
+        "tid": 1569253,
+        "title": "Kesavananda Bharati v. State of Kerala",
+        "headline": "Landmark case establishing the basic structure doctrine of the Indian Constitution...",
+        "docsource": "Supreme Court of India",
+        "docsize": 150000,
+        "publishdate": "24-4-1973",
+        "numcites": 120,
+        "numcitedby": 142,
+        "catname": "Supreme Court of India",
+        "citeList": [
+            {
+                "tid": 1234567,
+                "title": "Golaknath v. State of Punjab"
+            },
+            {
+                "tid": 7654321,
+                "title": "Shankari Prasad v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 1712542,
+        "title": "Maneka Gandhi v. Union of India",
+        "headline": "Expanded the scope of Article 21 by holding that the right to life and personal liberty...",
+        "docsource": "Supreme Court of India",
+        "docsize": 85000,
+        "publishdate": "25-1-1978",
+        "numcites": 95,
+        "numcitedby": 118,
+        "catname": "Supreme Court of India",
+        "citeList": [
+            {
+                "tid": 1928374,
+                "title": "A.K. Gopalan v. State of Madras"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 1032145,
+        "title": "Vishaka v. State of Rajasthan",
+        "headline": "Laid down guidelines to prevent sexual harassment of women at workplace...",
+        "docsource": "Supreme Court of India",
+        "docsize": 60000,
+        "publishdate": "13-8-1997",
+        "numcites": 45,
+        "numcitedby": 95,
+        "catname": "Supreme Court of India",
+        "citeList": [],
+        "citedbyList": []
+    },
+    {
+        "tid": 127517806,
+        "title": "K.S. Puttaswamy v. Union of India",
+        "headline": "Unanimously held that the right to privacy is a fundamental right protected under Articles 14, 19, and 21...",
+        "docsource": "Supreme Court of India",
+        "docsize": 250000,
+        "publishdate": "24-8-2017",
+        "numcites": 150,
+        "numcitedby": 87,
+        "catname": "Supreme Court of India",
+        "citeList": [
+            {
+                "tid": 444444,
+                "title": "M.P. Sharma v. Satish Chandra"
+            },
+            {
+                "tid": 555555,
+                "title": "Kharak Singh v. State of UP"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 166827725,
+        "title": "Navtej Singh Johar v. Union of India",
+        "headline": "Decriminalized consensual homosexual acts by reading down Section 377 of the Indian Penal Code...",
+        "docsource": "Supreme Court of India",
+        "docsize": 180000,
+        "publishdate": "6-9-2018",
+        "numcites": 60,
+        "numcitedby": 76,
+        "catname": "Supreme Court of India",
+        "citeList": [
+            {
+                "tid": 999111,
+                "title": "Suresh Kumar Koushal v. Naz Foundation"
+            },
+            {
+                "tid": 127517806,
+                "title": "K.S. Puttaswamy v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000001,
+        "title": "State of Maharashtra v. Rajesh Kumar",
+        "headline": "The Bombay High Court set aside the landlord's eviction notice, ruling that...",
+        "docsource": "Bombay High Court",
+        "docsize": 12000,
+        "publishdate": "15-3-2024",
+        "numcites": 10,
+        "numcitedby": 34,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 888111,
+                "title": "V. Dhanapal Chettiar v. Yesodai Ammal"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 9000001,
+        "title": "Anita Sharma v. Skyline Developers Pvt. Ltd.",
+        "headline": "Consumer complaint against a real estate developer for delayed possession of a flat...",
+        "docsource": "District Consumer Forum",
+        "docsize": 8000,
+        "publishdate": "10-2-2023",
+        "numcites": 5,
+        "numcitedby": 8,
+        "catname": "District Courts",
+        "citeList": [
+            {
+                "tid": 999222,
+                "title": "Pioneer Urban Land and Infrastructure Ltd. v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 9000002,
+        "title": "Ramesh Gupta v. XYZ Electronics Ltd.",
+        "headline": "Consumer purchased a defective laptop that malfunctioned within warranty period...",
+        "docsource": "District Consumer Forum",
+        "docsize": 5000,
+        "publishdate": "22-7-2022",
+        "numcites": 2,
+        "numcitedby": 5,
+        "catname": "District Courts",
+        "citeList": [],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000002,
+        "title": "Priya Mehta v. State of Gujarat",
+        "headline": "Domestic violence case where the Gujarat High Court upheld the Magistrate's protection order...",
+        "docsource": "Gujarat High Court",
+        "docsize": 14500,
+        "publishdate": "5-11-2023",
+        "numcites": 18,
+        "numcitedby": 41,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 888222,
+                "title": "Hiral P. Harsora v. Kusum Narottamdas Harsora"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000003,
+        "title": "Tech Solutions India v. DataSafe Corp.",
+        "headline": "Cyber crime case involving unauthorized access to a competitor's trade secrets through hacking...",
+        "docsource": "Delhi High Court",
+        "docsize": 22000,
+        "publishdate": "18-1-2024",
+        "numcites": 15,
+        "numcitedby": 29,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 888333,
+                "title": "Syed Asifuddin v. State of Andhra Pradesh"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 7000001,
+        "title": "Green Earth Foundation v. National Highways Authority",
+        "headline": "Environmental PIL challenging highway construction through a protected forest...",
+        "docsource": "Supreme Court of India",
+        "docsize": 45000,
+        "publishdate": "30-5-2022",
+        "numcites": 32,
+        "numcitedby": 63,
+        "catname": "Supreme Court of India",
+        "citeList": [
+            {
+                "tid": 777111,
+                "title": "T.N. Godavarman Thirumulpad v. Union of India"
+            },
+            {
+                "tid": 777222,
+                "title": "M.C. Mehta v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000004,
+        "title": "Workers' Union v. Steel Manufacturing Co. Ltd.",
+        "headline": "Industrial dispute regarding unlawful retrenchment of 200 factory workers without following proper procedure...",
+        "docsource": "Madras High Court",
+        "docsize": 18500,
+        "publishdate": "12-9-2021",
+        "numcites": 8,
+        "numcitedby": 22,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 888444,
+                "title": "Workmen of Meenakshi Mills v. Meenakshi Mills"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 9000003,
+        "title": "Suresh Kumar v. Punjab National Bank",
+        "headline": "Employee challenged wrongful termination from a nationalized bank...",
+        "docsource": "District Court",
+        "docsize": 6500,
+        "publishdate": "20-2-2024",
+        "numcites": 3,
+        "numcitedby": 7,
+        "catname": "District Courts",
+        "citeList": [
+            {
+                "tid": 999333,
+                "title": "Hindustan Tin Works v. Employees"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000005,
+        "title": "Meera Devi v. State of Uttar Pradesh",
+        "headline": "Writ petition challenging the denial of widow pension. The Allahabad High Court directed...",
+        "docsource": "Allahabad High Court",
+        "docsize": 10200,
+        "publishdate": "14-6-2022",
+        "numcites": 12,
+        "numcitedby": 38,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 888555,
+                "title": "NALSA v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000006,
+        "title": "Deepak Constructions v. Municipal Corporation of Pune",
+        "headline": "Challenge to demolition of unauthorized construction. The Bombay High Court upheld...",
+        "docsource": "Bombay High Court",
+        "docsize": 16000,
+        "publishdate": "3-3-2023",
+        "numcites": 7,
+        "numcitedby": 19,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 777222,
+                "title": "MC Mehta v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 7000002,
+        "title": "State v. Mohammad Afzal",
+        "headline": "High-profile criminal case involving charges of terrorism and conspiracy...",
+        "docsource": "Supreme Court of India",
+        "docsize": 125000,
+        "publishdate": "18-9-2020",
+        "numcites": 65,
+        "numcitedby": 89,
+        "catname": "Supreme Court of India",
+        "citeList": [
+            {
+                "tid": 777333,
+                "title": "Bachan Singh v. State of Punjab"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000007,
+        "title": "Sanjay Mishra v. State of Madhya Pradesh",
+        "headline": "Bail application in a case involving cheating and forgery. The High Court granted bail...",
+        "docsource": "Madhya Pradesh High Court",
+        "docsize": 9500,
+        "publishdate": "29-7-2024",
+        "numcites": 4,
+        "numcitedby": 15,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 888666,
+                "title": "Hussainara Khatoon v. Home Secretary, State of Bihar"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000008,
+        "title": "Rajiv Traders v. Commissioner of Customs",
+        "headline": "Challenge to customs duty assessment on imported goods. The High Court found...",
+        "docsource": "Madras High Court",
+        "docsize": 13000,
+        "publishdate": "5-5-2021",
+        "numcites": 6,
+        "numcitedby": 11,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 888777,
+                "title": "Commissioner of Customs v. Dilip Kumar & Co."
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 9000004,
+        "title": "Sunita Rani v. Vijay Kumar",
+        "headline": "Divorce petition on grounds of cruelty and desertion. The Family Court granted divorce...",
+        "docsource": "District Family Court",
+        "docsize": 6000,
+        "publishdate": "11-8-2023",
+        "numcites": 2,
+        "numcitedby": 4,
+        "catname": "District Courts",
+        "citeList": [
+            {
+                "tid": 999444,
+                "title": "Samar Ghosh v. Jaya Ghosh"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 9000005,
+        "title": "Citizens for Clean Air v. State Pollution Board",
+        "headline": "Local community group filed complaint against a factory operating without pollution clearance...",
+        "docsource": "District Court",
+        "docsize": 7500,
+        "publishdate": "14-1-2024",
+        "numcites": 3,
+        "numcitedby": 6,
+        "catname": "District Courts",
+        "citeList": [
+            {
+                "tid": 999555,
+                "title": "Vellore Citizens Welfare Forum v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000009,
+        "title": "Anil Enterprises v. State Bank of India",
+        "headline": "Commercial dispute where a business challenged the bank's invocation of the SARFAESI Act...",
+        "docsource": "Delhi High Court",
+        "docsize": 19000,
+        "publishdate": "28-10-2022",
+        "numcites": 9,
+        "numcitedby": 25,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 888888,
+                "title": "Mardia Chemicals Ltd. v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 7000003,
+        "title": "Dr. Rajan Nair v. Apollo Hospital",
+        "headline": "Medical negligence case where the Supreme Court established updated guidelines...",
+        "docsource": "Supreme Court of India",
+        "docsize": 95000,
+        "publishdate": "7-4-2024",
+        "numcites": 42,
+        "numcitedby": 52,
+        "catname": "Supreme Court of India",
+        "citeList": [
+            {
+                "tid": 777444,
+                "title": "Indian Medical Association v. V.P. Shantha"
+            },
+            {
+                "tid": 777555,
+                "title": "Jacob Mathew v. State of Punjab"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 8000010,
+        "title": "Praveen Digital Services v. Govt. of Karnataka",
+        "headline": "Challenge to government order mandating data localization for state service providers...",
+        "docsource": "Karnataka High Court",
+        "docsize": 17500,
+        "publishdate": "19-1-2025",
+        "numcites": 5,
+        "numcitedby": 12,
+        "catname": "High Courts",
+        "citeList": [
+            {
+                "tid": 127517806,
+                "title": "K.S. Puttaswamy v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 7000004,
+        "title": "Mohammad Iqbal v. State of Jammu & Kashmir",
+        "headline": "Habeas corpus petition challenging preventive detention under the Public Safety Act...",
+        "docsource": "Supreme Court of India",
+        "docsize": 55000,
+        "publishdate": "11-12-2021",
+        "numcites": 28,
+        "numcitedby": 68,
+        "catname": "Supreme Court of India",
+        "citeList": [
+            {
+                "tid": 777666,
+                "title": "A.K. Roy v. Union of India"
+            },
+            {
+                "tid": 1712542,
+                "title": "Maneka Gandhi v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    },
+    {
+        "tid": 9000006,
+        "title": "Lakshmi Self-Help Group v. District Collector, Thanjavur",
+        "headline": "Members of a women's self-help group challenged the denial of micro-credit loans...",
+        "docsource": "District Court",
+        "docsize": 4800,
+        "publishdate": "26-2-2025",
+        "numcites": 1,
+        "numcitedby": 3,
+        "catname": "District Courts",
+        "citeList": [
+            {
+                "tid": 888555,
+                "title": "NALSA v. Union of India"
+            }
+        ],
+        "citedbyList": []
+    }
+]
