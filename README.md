@@ -1,5 +1,21 @@
 # VidhimurAI — Legal Intelligence Platform
 
+## Demo
+
+▶️ **[Watch the Full Demo on YouTube](https://youtube.com/YOUR_VIDEO_LINK_HERE)**
+
+## Screenshots
+
+| Landing Page | EMPOWER Analysis |
+|:---:|:---:|
+| ![Landing Page](images/img1.png) | ![EMPOWER Analysis](images/img2.png) |
+
+| Legal Strategy Timeline | Multilingual Translation |
+|:---:|:---:|
+| ![Legal Strategy Timeline](images/img3.png) | ![Multilingual Translation](images/img4.png) |
+
+> **Note**: Place your screenshots in the `images/` folder as `img1.png`, `img2.png`, `img3.png`, and `img4.png`.
+
 ## Problem Statement
 
 Access to legal guidance in India remains a privilege. Over 70% of citizens lack awareness of their legal rights, applicable statutes, and procedural options when facing disputes. Language barriers, legal jargon, and the high cost of legal consultation create a systemic gap between ordinary citizens and the justice system.
@@ -18,6 +34,41 @@ VidhimurAI is a modular legal intelligence system that transforms a plain-langua
 6. **Legal Roadmap** — Generates a complete procedural action plan covering evidence, notices, litigation, costs, and escalation.
 
 The entire pipeline runs from a single user input and produces court-ready documentation.
+
+## Target Users
+
+| User Group | How VidhimurAI Helps |
+|------------|---------------------|
+| **Citizens** | Understand legal rights in plain language, get a ready-to-file complaint draft, and know the exact steps to take — without hiring a lawyer for initial guidance. |
+| **Law Students** | Study how statutes apply to real-world scenarios, analyze case precedent scoring, and understand procedural roadmaps across legal domains. |
+| **Legal Researchers** | Quickly retrieve and rank relevant case law using dual-mode scoring (authority + relevance), with AI-generated case summaries and influence analysis. |
+| **Paralegals & Legal Aid Workers** | Generate first-draft complaints and action plans for clients in underserved communities, reducing time per case from hours to minutes. |
+| **NGOs & Legal Clinics** | Provide multilingual legal guidance (13 Indian languages) to non-English-speaking populations, bridging the access-to-justice gap. |
+
+## How VidhimurAI Compares to Existing Solutions
+
+| Feature | Indian Kanoon | Manupatra | SCC Online | CaseMine | Vakilsearch | **VidhimurAI** |
+|---------|:---:|:---:|:---:|:---:|:---:|:---:|
+| Case Search | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Plain-Language Input | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Issue Classification | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Auto Draft Generation | ❌ | ❌ | ❌ | ❌ | Templates only | ✅ (AI-generated, case-specific) |
+| Simplified Explanation | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Multilingual Support | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ (13 languages) |
+| Procedural Roadmap | ❌ | ❌ | ❌ | ❌ | Basic guides | ✅ (9-section AI roadmap) |
+| Legal Strategy Timeline | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Legal Strength Assessment | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Relevance-Gated Scoring | ❌ | ❌ | ❌ | ✅ (CiteMap) | ❌ | ✅ |
+| Free & Open Source | ✅ | ❌ (Paid) | ❌ (Paid) | Freemium | ❌ (Paid) | ✅ |
+| Target User | Lawyers | Lawyers | Lawyers | Lawyers | Businesses | **Citizens first** |
+
+### What Makes VidhimurAI Different
+
+1. **Citizen-first, not lawyer-first** — Existing platforms assume legal training. VidhimurAI accepts plain-language input like *"my landlord won't return my deposit"* and produces actionable output.
+2. **End-to-end pipeline** — No other platform combines case retrieval → draft generation → simplification → translation → roadmap in a single workflow.
+3. **Multilingual by design** — 13 Indian languages supported, making legal guidance accessible to non-English speakers across India.
+4. **Transparent scoring** — Every case result shows exactly why it was ranked (authority score, relevance score, court weight, citation impact) — no black-box algorithms.
+5. **Free and open source** — Unlike Manupatra (₹15,000+/year) or SCC Online (₹12,000+/year), VidhimurAI is completely free.
 
 ## System Architecture
 
@@ -50,13 +101,19 @@ The entire pipeline runs from a single user input and produces court-ready docum
      | Generator  |   |          | |          | | Enhancer    |
      +--------+---+   +------+---+ +---+------+ +----+--------+
               |              |         |              |
-              +---------+----+---------+----+---------+
+               +---------+----+---------+----+---------+
                         |
                         v
                +--------+--------+
                | Roadmap         |
                | Generator       |
-               +-----------------+
+               +--------+--------+
+                        |
+                        v
+               +--------+--------+
+               | Timeline        |
+               | Visualization   |
+               +--------+--------+
                         |
                         v
                +--------+--------+
@@ -148,9 +205,11 @@ Translates legal drafts into 13 Indian languages: Hindi, Tamil, Telugu, Kannada,
 
 Provides AI-generated concise case holdings and influence analysis for each precedent. Explains why specific cases are legally significant based on citation count, court level, and recency.
 
-### 6. Procedural Legal Roadmap
+### 6. Procedural Legal Roadmap (LLM-Powered)
 
-Generates a complete action strategy covering:
+Generates a complete 9-section action strategy using the LLM, constrained to the specific legal domain and statutes identified in the analysis. The roadmap generator enforces strict domain boundaries — a Consumer Protection issue will never suggest Motor Vehicles Act remedies. Each bullet is action-verb-first and capped at 12 words for clarity.
+
+Sections covered:
 - Immediate actions (0-7 days)
 - Evidence checklist
 - Legal notice strategy
@@ -160,6 +219,23 @@ Generates a complete action strategy covering:
 - Cost considerations
 - Risk assessment
 - Escalation path (appeal options, alternate forums)
+
+### 7. Legal Strategy Timeline (Visual)
+
+An interactive, phase-based visual timeline displayed on the frontend that breaks the legal roadmap into distinct stages with progress indicators. Each stage (Immediate Actions → Evidence Collection → Legal Notice → Pre-litigation → Litigation → Escalation) is presented as a collapsible card with:
+- Phase-specific icons and color coding
+- Issue type badge and legal strength indicator (Strong/Moderate/Weak)
+- Actionable bullet points per phase
+- Estimated timeline and cost summary
+
+### 8. Intelligent Query Enhancement (LLM Fallback)
+
+When deterministic keyword matching fails to classify a legal domain (returns "General Legal Issue"), the system automatically invokes the LLM as a fallback to:
+- Classify the legal domain from context
+- Suggest additional search terms for better case retrieval
+- Expand the query with domain-specific legal vocabulary
+
+This ensures that even unconventional or colloquial descriptions of legal problems (e.g., *"my city is very polluted"* → Environmental Law) are correctly classified.
 
 ## Example Workflow
 
@@ -186,27 +262,53 @@ Generates a complete action strategy covering:
 
 - Python 3.11+
 - Node.js 18+
+- Git
 - A Groq API key ([console.groq.com](https://console.groq.com))
 
-### Backend Setup
+### 1. Clone the Repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/Sariga-2005/VidhimurAI.git
 cd VidhimurAI
-
-# Install Python dependencies
-pip install -r backend/requirements.txt
-pip install groq python-dotenv
-
-# Add your API key
-echo "GROQ_API_KEY=your_key_here" > .env
-
-# Run the backend server
-uvicorn backend.app.main:app --reload
 ```
 
-### Frontend Setup
+### 2. Configure Environment Variables
+
+Create a `.env` file in the **project root** (`VidhimurAI/`):
+
+```bash
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+> Replace `your_groq_api_key_here` with your actual key from [console.groq.com](https://console.groq.com).
+
+### 3. Backend Setup
+
+```bash
+# Navigate to the backend directory
+cd backend
+
+# Create and activate a virtual environment
+python -m venv venv
+
+# Activate (Windows PowerShell)
+.\venv\Scripts\Activate
+
+# Activate (macOS / Linux)
+# source venv/bin/activate
+
+# Install all dependencies
+pip install -r requirements.txt
+
+# Start the backend server
+python -m uvicorn app.main:app --port 8000
+```
+
+> **Note**: The backend must be started from inside the `backend/` directory. Use `python -m uvicorn` to avoid PATH issues. Add `--reload` for auto-restart during development.
+
+### 4. Frontend Setup
+
+Open a **separate terminal**:
 
 ```bash
 cd frontend
@@ -214,11 +316,37 @@ npm install
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173` and the backend API at `http://localhost:8000`.
+### 5. Access the Application
 
-### API Documentation
+| Service | URL |
+|---------|-----|
+| Frontend | [http://localhost:5173](http://localhost:5173) |
+| Backend API | [http://localhost:8000](http://localhost:8000) |
+| API Docs (Swagger) | [http://localhost:8000/docs](http://localhost:8000/docs) |
 
-Once the backend is running, visit `http://localhost:8000/docs` for the interactive Swagger UI.
+> Both the backend and frontend must be running simultaneously for the application to work.
+
+### Quick Reference Commands
+
+```bash
+# Activate virtual environment (run from backend/ directory)
+# Windows PowerShell:
+.\venv\Scripts\Activate
+# macOS / Linux:
+source venv/bin/activate
+
+# Deactivate virtual environment (when done)
+deactivate
+
+# Start backend (from backend/ directory, with venv activated)
+python -m uvicorn app.main:app --port 8000
+
+# Start backend with auto-reload (development)
+python -m uvicorn app.main:app --port 8000 --reload
+
+# Start frontend (from frontend/ directory)
+npm run dev
+```
 
 ## Project Structure
 
