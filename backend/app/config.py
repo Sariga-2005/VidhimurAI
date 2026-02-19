@@ -128,6 +128,76 @@ SCORE_WEIGHTS: dict[str, dict[str, float]] = {
 }
 
 # ---------------------------------------------------------------------------
+# Precise sub-classification for Property Law disputes
+# ---------------------------------------------------------------------------
+PROPERTY_SUBCATEGORIES: dict[str, list[str]] = {
+    "Security Deposit Recovery": [
+        "security deposit", "deposit", "refund", "return deposit",
+        "caution money", "advance deposit", "deposit recovery",
+    ],
+    "Tenancy Dispute": [
+        "tenant", "landlord", "eviction", "vacate", "flat",
+        "rent agreement", "tenancy", "rental",
+    ],
+    "Lease Dispute": [
+        "lease", "lease agreement", "lease termination",
+        "breach of lease", "lease deed",
+    ],
+    "Rent Recovery Dispute": [
+        "rent recovery", "unpaid rent", "arrears", "rent arrears",
+        "rent default", "non payment rent",
+    ],
+}
+
+# ---------------------------------------------------------------------------
+# Relevance threshold — discard cases scored below this
+# ---------------------------------------------------------------------------
+RELEVANCE_THRESHOLD = 10.0
+
+# ---------------------------------------------------------------------------
+# Statute blacklist — patterns to EXCLUDE from relevant_sections
+# ---------------------------------------------------------------------------
+STATUTE_BLACKLIST_PATTERNS: list[str] = [
+    "prevention of terrorism",
+    "public safety act",
+    "sexual harassment",
+    "information technology act",
+    "digital personal data",
+    "indian penal code, section 120b",
+    "indian penal code, section 379",
+    "indian penal code, section 498a",
+    "protection of women from domestic violence",
+    "uapa",
+    "national security act",
+    "armed forces",
+    "official secrets",
+    "constitution of india, article 14",
+    "constitution of india, article 19",
+    "constitution of india, article 21",
+    "constitution of india, article 22",
+]
+
+# ---------------------------------------------------------------------------
+# Case exclusion keywords — cases whose summary contains these are excluded
+# ---------------------------------------------------------------------------
+CASE_EXCLUSION_KEYWORDS: list[str] = [
+    "terrorism",
+    "habeas corpus",
+    "preventive detention",
+    "public interest litigation",
+    "constitutional amendment",
+    "data localization",
+    "sexual harassment",
+    "domestic violence",
+    "cyber crime",
+    "hacking",
+    "unauthorized access",
+    "trade secrets",
+    "micro-credit",
+    "self-help group",
+]
+
+# ---------------------------------------------------------------------------
 # Layer 6 — Cache TTL (seconds)
 # ---------------------------------------------------------------------------
 CACHE_TTL_SECONDS = 3600  # 1 hour
@@ -200,6 +270,30 @@ ACTION_ROADMAPS: dict[str, list[dict[str, str]]] = {
         {"step": "2", "title": "Serve a Legal Notice", "description": "Send a formal notice to the opposing party demanding resolution."},
         {"step": "3", "title": "Attempt Mediation", "description": "Try to resolve the dispute through an authorized mediator."},
         {"step": "4", "title": "File a Civil Suit", "description": "Approach the appropriate civil court for relief."},
+    ],
+    "Security Deposit Recovery": [
+        {"step": "1", "title": "Send a Legal Notice", "description": "Send a formal notice under Section 80 CPC demanding return of the security deposit within 15 days."},
+        {"step": "2", "title": "Gather Evidence", "description": "Collect rent agreement, deposit receipts, communication records, and photographs of property condition."},
+        {"step": "3", "title": "Attempt Settlement/Mediation", "description": "Try to negotiate return of the deposit through mediation or a local Lok Adalat."},
+        {"step": "4", "title": "File Civil Recovery Suit", "description": "File a suit for recovery of money in the appropriate civil court or consumer forum."},
+    ],
+    "Tenancy Dispute": [
+        {"step": "1", "title": "Document the Dispute", "description": "Gather your rent agreement, payment receipts, and all communications."},
+        {"step": "2", "title": "Serve a Legal Notice", "description": "Send a formal legal notice to the landlord/tenant."},
+        {"step": "3", "title": "Approach Rent Controller", "description": "File a complaint with the Rent Controller under the applicable Rent Control Act."},
+        {"step": "4", "title": "File in Civil Court", "description": "If unresolved, file a civil suit for appropriate relief."},
+    ],
+    "Lease Dispute": [
+        {"step": "1", "title": "Review the Lease Agreement", "description": "Examine lease terms, renewal clauses, and breach provisions."},
+        {"step": "2", "title": "Serve a Legal Notice", "description": "Notify the other party of the breach and demand compliance or remedy."},
+        {"step": "3", "title": "Attempt Mediation", "description": "Try to resolve through mediation or arbitration if provided in the lease."},
+        {"step": "4", "title": "File a Civil Suit", "description": "Approach the civil court for specific performance or damages."},
+    ],
+    "Rent Recovery Dispute": [
+        {"step": "1", "title": "Send Demand Notice", "description": "Send a formal demand notice for unpaid rent/arrears."},
+        {"step": "2", "title": "Gather Evidence", "description": "Collect rent agreement, bank statements, and communication records."},
+        {"step": "3", "title": "File with Rent Controller", "description": "Approach the Rent Controller for summary proceedings."},
+        {"step": "4", "title": "File Recovery Suit", "description": "File a civil suit for recovery of due rent."},
     ],
     "Consumer Protection": [
         {"step": "1", "title": "Send a Written Complaint", "description": "Send a formal complaint to the service provider or manufacturer."},

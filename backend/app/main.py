@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.errors.handlers import register_error_handlers
-from app.routers import empower, research
+from app.routers import empower, research, ai
 
 # ---------------------------------------------------------------------------
 # App factory
@@ -45,6 +45,7 @@ app.add_middleware(
 
 app.include_router(research.router)
 app.include_router(empower.router)
+app.include_router(ai.router)
 register_error_handlers(app)
 
 

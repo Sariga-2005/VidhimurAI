@@ -88,3 +88,56 @@ class EmpowerResponse(BaseModel):
     precedents: list[CaseResult]
     legal_strength: str            # "Strong" | "Moderate" | "Weak"
     action_steps: list[str]
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  AI / LLM schemas
+# ═══════════════════════════════════════════════════════════════════════════
+
+class SimplifyRequest(BaseModel):
+    """POST /ai/simplify"""
+    legal_summary: str = Field(..., min_length=1, description="Legal text to simplify")
+
+
+class SimplifyResponse(BaseModel):
+    simplified_summary: str
+
+
+class TranslateRequest(BaseModel):
+    """POST /ai/translate"""
+    legal_draft: str = Field(..., min_length=1, description="Legal text to translate")
+    target_language: str = Field(..., min_length=1, description="Target language (e.g. Hindi, Tamil)")
+
+
+class TranslateResponse(BaseModel):
+    translated_text: str
+
+
+class DraftRequest(BaseModel):
+    """POST /ai/draft"""
+    issue_type: str
+    relevant_sections: list[str] = Field(default_factory=list)
+    precedents: list[dict] = Field(default_factory=list)
+    legal_strength: str = "Moderate"
+    action_steps: list[str] = Field(default_factory=list)
+
+
+class DraftResponse(BaseModel):
+    complaint_title: str
+    draft_text: str
+    recommended_authority: str
+
+
+class RoadmapRequest(BaseModel):
+    """POST /ai/roadmap"""
+    issue_type: str
+    relevant_sections: list[str] = Field(default_factory=list)
+    legal_strength: str = "Moderate"
+    action_steps: list[str] = Field(default_factory=list)
+
+
+class EnhanceRequest(BaseModel):
+    """POST /ai/enhance"""
+    query: str = Field(..., min_length=1, description="Original search query")
+    top_cases: list[dict] = Field(default_factory=list)
+    most_influential_case: dict | None = None

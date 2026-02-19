@@ -13,6 +13,7 @@ Mode weights (from config.SCORE_WEIGHTS):
 
 from __future__ import annotations
 
+import math
 import re
 
 from app.config import (
@@ -54,11 +55,17 @@ def compute_score(
     relevance_score = recency_b + relevance_s
 
     # ---- Mode-weighted final score ----
-    weights = SCORE_WEIGHTS.get(mode, SCORE_WEIGHTS["research"])
-    final_score = (
-        weights["authority"] * authority_score
-        + weights["relevance"] * relevance_score
-    )
+    if mode == "empower":
+        # Relevance-Gated Authority: Authority only boosts if relevance is high.
+        # This prevents irrelevant landmark cases from dominating.
+        final_score = relevance_score + (authority_score * (relevance_score / 100.0))
+    else:
+        # Standard weighted sum for research
+        weights = SCORE_WEIGHTS.get(mode, SCORE_WEIGHTS["research"])
+        final_score = (
+            weights["authority"] * authority_score
+            + weights["relevance"] * relevance_score
+        )
 
     breakdown = {
         "authority_score": round(authority_score, 2),
@@ -90,8 +97,12 @@ def _court_weight(court: str) -> int:
 
 
 def _citation_score(citation_count: int) -> float:
-    """Citation contribution = count × 0.5"""
-    return citation_count * 0.5
+    """Citation contribution = log(count + 1).
+
+    This drastically reduces the dominance of landmark cases with 100+ citations
+    while still rewarding authority.
+    """
+    return math.log1p(citation_count) * 2
 
 
 def _recency_boost(year: int) -> float:
@@ -129,4 +140,6 @@ def _relevance_score(case: CaseRecord, query_tokens: list[str]) -> float:
             matches += 1
 
     ratio = matches / len(query_tokens)
-    return round(ratio * 10, 2)
+
+    # Boost: Scale 0-1 ratio to 0-100 score
+    return round(ratio * 100, 2)
