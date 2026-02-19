@@ -1,0 +1,99 @@
+{
+    "header": {
+        "brand": "VidhimurAI",
+        "tagline": "Legal Intelligence",
+        "nav": {
+            "about": "About",
+            "features": "Features",
+            "useCases": "Use Cases",
+            "getStarted": "Get Started",
+            "research": "Research",
+            "empower": "Empower"
+        },
+        "menu": "MENU"
+    },
+    "hero": {
+        "headline1": "Justice, Accessible",
+        "headline2": "to Every Citizen",
+        "subheadline": "Empowering legal research and citizen rights with AI-driven case analysis, precedent intelligence, and actionable legal guidance.",
+        "cta1": "Enter Legal Research",
+        "cta2": "Seek Legal Empowerment"
+    },
+    "about": {
+        "label": "About the Platform",
+        "heading1": "Bridging Law &",
+        "heading2": "Technology",
+        "description": "VidhimurAI is an AI-powered legal intelligence platform designed to make India's legal ecosystem transparent, navigable, and empowering for every citizen.",
+        "pillars": {
+            "access": "Access",
+            "intelligence": "Intelligence",
+            "empowerment": "Empowerment"
+        }
+    },
+    "features": {
+        "label": "Platform Features",
+        "heading1": "Powerful Tools for",
+        "heading2": "Legal Intelligence",
+        "description": "Two distinct modes — Research and Empower — provide comprehensive legal support from case discovery to actionable guidance.",
+        "items": {
+            "research": "Research Mode",
+            "empower": "Empower Mode",
+            "rankings": "Case Rankings",
+            "strength": "Legal Strength",
+            "roadmap": "Action Roadmap",
+            "draft": "Draft Generation"
+        }
+    },
+    "useCases": {
+        "label": "Who Benefits",
+        "heading1": "Built for",
+        "heading2": "Everyone",
+        "description": "Whether you're a citizen seeking clarity, a lawyer preparing arguments, or a student studying law — VidhimurAI is designed for you.",
+        "items": {
+            "citizens": "Citizens",
+            "lawyers": "Lawyers & Advocates",
+            "students": "Law Students",
+            "ngos": "NGOs & Legal Aid"
+        }
+    },
+    "footer": {
+        "copyright": "© {year} VidhimurAI. All rights reserved. This platform is for informational purposes only and does not constitute legal advice.",
+        "madeIn": "🇮🇳 Made in India"
+    },
+    "research": {
+        "title": "Research",
+        "heading1": "Legal Case",
+        "heading2": "Research",
+        "subtitle": "Search India's legal cases with deterministic ranking and authority scoring",
+        "placeholder": "Describe your legal query, e.g. \"landlord tenant deposit dispute\"",
+        "searchBtn": "Search",
+        "advancedFilters": "Advanced Filters",
+        "filterCourt": "Court",
+        "allCourts": "All Courts",
+        "filterYearFrom": "Year From",
+        "filterYearTo": "Year To",
+        "searching": "Searching cases…",
+        "resultsFound": "{count} cases found",
+        "mostInfluential": "Most Influential",
+        "authority": "Authority",
+        "relevance": "Relevance",
+        "noResults": "No cases matched your query. Try different keywords.",
+        "emptyState": "Enter a legal query to search relevant cases"
+    },
+    "empower": {
+        "title": "Empower",
+        "heading1": "Citizen Legal",
+        "heading2": "Empowerment",
+        "subtitle": "Describe your legal issue and receive precedent-backed analysis and actionable guidance",
+        "placeholder": "Describe your legal situation, e.g. \"My employer fired me without notice after 3 years of service\"",
+        "contextPlaceholder": "Any additional context? (optional, e.g. city, date, industry)",
+        "analyzeBtn": "Analyze My Case",
+        "analyzing": "Analyzing your case…",
+        "issueType": "Issue Classification",
+        "legalStrength": "Legal Strength",
+        "relevantSections": "Relevant Legal Sections",
+        "precedents": "Supporting Precedents",
+        "actionRoadmap": "Action Roadmap",
+        "emptyState": "Describe your legal issue to get empowerment analysis"
+    }
+}
