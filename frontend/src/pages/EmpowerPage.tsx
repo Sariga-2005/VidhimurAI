@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { analyzeEmpowerment } from '../services/api'
 import type { EmpowerResponse, CaseResult } from '../services/api'
 import { useTranslation } from '../i18n/useTranslation'
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition'
 
 const EmpowerPage = () => {
     const { t } = useTranslation()
@@ -11,6 +12,11 @@ const EmpowerPage = () => {
     const [results, setResults] = useState<EmpowerResponse | null>(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+
+    const onVoiceResult = useCallback((text: string) => {
+        setQuery(prev => prev ? prev + ' ' + text : text)
+    }, [])
+    const { isListening, toggleListening, isSupported } = useSpeechRecognition(onVoiceResult)
 
     const handleAnalyze = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -87,13 +93,31 @@ const EmpowerPage = () => {
 
                     <form onSubmit={handleAnalyze} className="space-y-4">
                         <div className="bg-white rounded-xl border border-official-200 shadow-lg focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20 transition-all overflow-hidden">
-                            <textarea
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                placeholder={t('empower.placeholder')}
-                                rows={4}
-                                className="w-full px-5 pt-5 pb-2 text-base text-official-900 placeholder:text-official-400 focus:outline-none resize-none bg-transparent"
-                            />
+                            <div className="relative">
+                                <textarea
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                    placeholder={t('empower.placeholder')}
+                                    rows={4}
+                                    className="w-full px-5 pt-5 pb-2 pr-12 text-base text-official-900 placeholder:text-official-400 focus:outline-none resize-none bg-transparent"
+                                />
+                                {isSupported && (
+                                    <button
+                                        type="button"
+                                        onClick={toggleListening}
+                                        className={`absolute top-4 right-4 p-1.5 rounded-full transition-all duration-300 ${isListening
+                                                ? 'text-red-500 bg-red-50 animate-pulse'
+                                                : 'text-official-400 hover:text-brand hover:bg-official-50'
+                                            }`}
+                                        title={isListening ? 'Stop listening' : 'Voice input'}
+                                    >
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                                        </svg>
+                                    </button>
+                                )}
+                            </div>
                             <div className="border-t border-official-100 px-5 py-3">
                                 <input
                                     type="text"
