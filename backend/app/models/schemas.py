@@ -65,6 +65,8 @@ class CaseResult(BaseModel):
     year: int
     citation_count: int
     strength_score: float
+    authority_score: float = 0.0
+    relevance_score: float = 0.0
     summary: str
 
 

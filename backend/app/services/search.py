@@ -1,18 +1,45 @@
-"""Search service — loads dataset, applies filters, ranks results."""
+"""
+Search service — production-grade pipeline.
+
+Pipeline:
+    0. Query Normalization  (stopwords, synonyms, domain detection)
+    1. Retrieval            (load all cases from adapter)
+    2. Authority Filter     (prioritize SC > HC > DC)
+    3. User Filters         (court, year range)
+    4. Deterministic Ranking (dual scoring: authority + relevance)
+    5. Cache                (store results for repeat queries)
+    6. Output Builder       (structured response)
+"""
 
 from __future__ import annotations
 
-import json
-from functools import lru_cache
-from pathlib import Path
-
+from app.config import get_authority_tier, AUTHORITY_MIN_HIGH_TIER
 from app.models.schemas import CaseRecord, CaseResult, SearchFilters, SearchResponse
 from app.services.ranking import compute_score, tokenize_query
+from app.services.query_normalizer import normalize_query
 from app.services.kanoon_adapter import get_all_cases
+from app.services.cache import cache
 
 
 # ---------------------------------------------------------------------------
-# Filtering
+# Layer 2 — Authority Filter
+# ---------------------------------------------------------------------------
+
+def _authority_filter(cases: list[CaseRecord]) -> list[CaseRecord]:
+    """
+    Prioritize higher courts. If enough SC + HC results exist,
+    exclude district court cases to reduce noise.
+    """
+    higher = [c for c in cases if get_authority_tier(c.court) <= 2]
+
+    if len(higher) >= AUTHORITY_MIN_HIGH_TIER:
+        return higher  # Enough authoritative results; skip lower courts
+
+    return cases  # Not enough high-tier; keep everything
+
+
+# ---------------------------------------------------------------------------
+# User Filters (court, year range)
 # ---------------------------------------------------------------------------
 
 def _apply_filters(cases: list[CaseRecord], filters: SearchFilters | None) -> list[CaseRecord]:
@@ -34,28 +61,45 @@ def _apply_filters(cases: list[CaseRecord], filters: SearchFilters | None) -> li
 
 
 # ---------------------------------------------------------------------------
-# Search pipeline
+# Search Pipeline
 # ---------------------------------------------------------------------------
 
 def search_cases(query: str, filters: SearchFilters | None = None) -> SearchResponse:
-    """Full search pipeline: load → filter → rank → format."""
+    """
+    Full search pipeline:
+        normalize → retrieve → authority filter → user filter → rank → cache → output
+    """
 
+    # Layer 0: Normalize query
+    normalized = normalize_query(query)
+
+    # Layer 6: Check query cache first
+    cache_key = normalized.search_string
+    cached = cache.get_query(cache_key)
+    if cached and filters is None:
+        return cached
+
+    # Layer 1: Retrieve all cases
     cases = get_all_cases()
-    filtered = _apply_filters(cases, filters)
-    tokens = tokenize_query(query)
 
-    # Score every case
+    # Layer 2: Authority filter (reduce noise)
+    authoritative = _authority_filter(cases)
+
+    # Layer 3: Apply user filters
+    filtered = _apply_filters(authoritative, filters)
+
+    # Layer 4: Dual scoring (mode = "research")
+    tokens = normalized.expanded_terms or tokenize_query(query)
     scored: list[tuple[CaseRecord, float, dict]] = []
     for case in filtered:
-        score, _breakdown = compute_score(case, tokens)
-        scored.append((case, score, _breakdown))
+        score, breakdown = compute_score(case, tokens, mode="research")
+        scored.append((case, score, breakdown))
 
-    # Sort descending by score
     scored.sort(key=lambda x: x[1], reverse=True)
 
-    # Build response
+    # Layer 7: Build structured output
     top_cases: list[CaseResult] = []
-    for case, score, _bd in scored:
+    for case, score, bd in scored:
         top_cases.append(CaseResult(
             kanoon_tid=case.kanoon_tid,
             case_name=case.case_name,
@@ -63,13 +107,21 @@ def search_cases(query: str, filters: SearchFilters | None = None) -> SearchResp
             year=case.year,
             citation_count=case.citation_count,
             strength_score=score,
+            authority_score=bd.get("authority_score", 0.0),
+            relevance_score=bd.get("relevance_score", 0.0),
             summary=case.summary,
         ))
 
     most_influential = top_cases[0] if top_cases else None
 
-    return SearchResponse(
+    response = SearchResponse(
         total_cases=len(top_cases),
         top_cases=top_cases,
         most_influential_case=most_influential,
     )
+
+    # Layer 6: Cache the result
+    if filters is None:
+        cache.set_query(cache_key, response)
+
+    return response

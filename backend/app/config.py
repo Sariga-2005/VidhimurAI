@@ -1,5 +1,6 @@
 """Application configuration and constants."""
 
+from datetime import datetime
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -13,20 +14,118 @@ KANOON_RAW_FILE = DATA_DIR / "kanoon_raw.json"         # Pure API data
 VIDHIMUR_TAGS_FILE = DATA_DIR / "vidhimur_tags.json"   # Our enrichment tags
 
 # ---------------------------------------------------------------------------
-# Court weights used by the ranking engine
+# Court weights used by the ranking engine (pattern-based)
 # ---------------------------------------------------------------------------
-COURT_WEIGHTS: dict[str, int] = {
-    "Supreme Court": 10,
-    "High Court": 7,
-    "District Court": 4,
-}
+def get_court_weight(court: str) -> int:
+    """Map ANY court name to a weight using pattern matching.
+
+    Tier     | Weight | Pattern
+    ---------|--------|--------------------------------------------
+    Supreme  |   10   | Contains 'supreme court'
+    High     |    7   | Contains 'high court'
+    Tribunal |    5   | Contains 'tribunal' or 'commission' or 'ngt'
+    District |    4   | Contains 'district' or 'sessions'
+    Other    |    3   | Anything unrecognized
+    """
+    name = court.lower()
+    if "supreme court" in name:
+        return 10
+    if "high court" in name:
+        return 7
+    if any(kw in name for kw in ("tribunal", "commission", "appellate", "ngt", "ncdrc")):
+        return 5
+    if any(kw in name for kw in ("district", "sessions", "magistrate", "consumer forum", "family court")):
+        return 4
+    return 3  # Default for unknown courts
 
 # ---------------------------------------------------------------------------
 # Recency boost parameters
 # ---------------------------------------------------------------------------
-CURRENT_YEAR = 2026
+CURRENT_YEAR = datetime.now().year
 RECENCY_MAX_BOOST = 5.0
 RECENCY_DECAY_RATE = 0.25          # points lost per year of age
+
+# ---------------------------------------------------------------------------
+# Layer 0 — Query Normalizer: Stopwords
+# ---------------------------------------------------------------------------
+STOPWORDS: set[str] = {
+    "i", "me", "my", "we", "our", "you", "your", "he", "she", "it", "they",
+    "a", "an", "the", "is", "am", "are", "was", "were", "be", "been", "being",
+    "have", "has", "had", "do", "does", "did", "will", "would", "shall",
+    "should", "may", "might", "can", "could", "must",
+    "to", "of", "in", "for", "on", "with", "at", "by", "from", "as",
+    "into", "about", "between", "through", "after", "before", "during",
+    "and", "but", "or", "nor", "not", "no", "so", "if", "then", "than",
+    "that", "this", "these", "those", "what", "which", "who", "whom",
+    "how", "when", "where", "why", "all", "each", "every", "both",
+    "up", "out", "off", "over", "under", "again", "further",
+    "very", "just", "too", "also", "only", "own", "same",
+    "here", "there", "now", "already", "still",
+    "refuses", "refused", "want", "wants", "need", "needs",
+    "please", "help", "get", "got", "getting",
+}
+
+# ---------------------------------------------------------------------------
+# Layer 0 — Query Normalizer: Legal Synonym Expansion
+# ---------------------------------------------------------------------------
+LEGAL_SYNONYMS: dict[str, list[str]] = {
+    "landlord": ["tenant", "rent", "lease", "eviction"],
+    "tenant": ["landlord", "rent", "lease"],
+    "deposit": ["security deposit", "refund"],
+    "eviction": ["tenant", "landlord", "possession"],
+    "fired": ["termination", "dismissal", "retrenchment"],
+    "sacked": ["termination", "dismissal", "retrenchment"],
+    "salary": ["wages", "remuneration", "compensation"],
+    "wages": ["salary", "remuneration"],
+    "divorce": ["marriage", "matrimonial", "custody"],
+    "custody": ["child", "guardianship", "divorce"],
+    "harassment": ["sexual harassment", "workplace", "stalking"],
+    "hacking": ["cyber", "unauthorized access", "data theft"],
+    "privacy": ["data protection", "surveillance", "personal data"],
+    "pollution": ["environment", "emission", "waste"],
+    "defective": ["deficiency", "warranty", "product liability"],
+    "accident": ["negligence", "compensation", "injury"],
+    "murder": ["homicide", "criminal", "ipc"],
+    "bail": ["arrest", "custody", "remand"],
+    "property": ["land", "real estate", "immovable"],
+    "fraud": ["cheating", "forgery", "misrepresentation"],
+}
+
+# ---------------------------------------------------------------------------
+# Layer 2 — Authority Filter: Court tiers (pattern-based)
+# ---------------------------------------------------------------------------
+def get_authority_tier(court: str) -> int:
+    """Map ANY court name to an authority tier using pattern matching.
+
+    Tier 1: Supreme Court (highest authority)
+    Tier 2: High Courts
+    Tier 3: Tribunals / Commissions / Appellate bodies
+    Tier 4: District / Sessions / Magistrate courts (lowest)
+    """
+    name = court.lower()
+    if "supreme court" in name:
+        return 1
+    if "high court" in name:
+        return 2
+    if any(kw in name for kw in ("tribunal", "commission", "appellate", "ngt", "ncdrc")):
+        return 3
+    return 4  # District, sessions, magistrate, or unknown
+
+# Minimum number of higher-tier results before we exclude lower tiers
+AUTHORITY_MIN_HIGH_TIER = 5
+
+# ---------------------------------------------------------------------------
+# Layer 4 — Dual Scoring: Mode-specific weights
+# ---------------------------------------------------------------------------
+SCORE_WEIGHTS: dict[str, dict[str, float]] = {
+    "research": {"authority": 0.7, "relevance": 0.3},
+    "empower":  {"authority": 0.5, "relevance": 0.5},
+}
+
+# ---------------------------------------------------------------------------
+# Layer 6 — Cache TTL (seconds)
+# ---------------------------------------------------------------------------
+CACHE_TTL_SECONDS = 3600  # 1 hour
 
 # ---------------------------------------------------------------------------
 # Legal issue → category mapping (deterministic classification)

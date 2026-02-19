@@ -14,6 +14,7 @@ When switching to the real API:
 from __future__ import annotations
 
 import json
+import logging
 from functools import lru_cache
 from pathlib import Path
 
@@ -22,6 +23,7 @@ from pydantic import BaseModel, Field
 from app.config import KANOON_RAW_FILE, VIDHIMUR_TAGS_FILE
 from app.models.schemas import CaseRecord
 
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Indian Kanoon API Schema (raw, no enrichment)
@@ -125,6 +127,13 @@ def _merge(doc: KanoonDoc, tags: VidhimurTags | None) -> CaseRecord:
 
 
 # ---------------------------------------------------------------------------
+# Failure Strategy — Last successful result fallback
+# ---------------------------------------------------------------------------
+
+_last_good_results: list[CaseRecord] = []
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -132,12 +141,30 @@ def get_all_cases() -> list[CaseRecord]:
     """
     Load raw Kanoon docs + enrichment tags, merge them, return CaseRecords.
 
-    This is the ONLY function that search.py and empower.py should call.
+    Failure Strategy:
+        If loading fails, fall back to the last successful result.
+        This ensures the system never fully breaks.
     """
-    raw_docs = _load_raw_docs()
-    tags_map = _load_tags()
+    global _last_good_results
 
-    return [
-        _merge(doc, tags_map.get(str(doc.tid)))
-        for doc in raw_docs
-    ]
+    try:
+        raw_docs = _load_raw_docs()
+        tags_map = _load_tags()
+
+        results = [
+            _merge(doc, tags_map.get(str(doc.tid)))
+            for doc in raw_docs
+        ]
+
+        _last_good_results = results  # Cache for fallback
+        return results
+
+    except Exception as e:
+        logger.error(f"Failed to load Kanoon data: {e}")
+
+        if _last_good_results:
+            logger.warning("Falling back to last successful data load.")
+            return _last_good_results
+
+        logger.critical("No fallback data available. Returning empty list.")
+        return []

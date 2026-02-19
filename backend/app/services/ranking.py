@@ -1,14 +1,27 @@
-"""Deterministic ranking engine for legal case scoring.
+"""
+Deterministic ranking engine — Dual Scoring Model.
 
-Formula:
-    Score = (CourtWeight × 3) + (CitationCount × 0.5) + RecencyBoost + RelevanceScore
+Produces three scores per case:
+    authority_score  = (CourtWeight x 3) + (CitationCount x 0.5)
+    relevance_score  = RecencyBoost + QueryOverlapScore
+    final_score      = weighted combination based on mode
+
+Mode weights (from config.SCORE_WEIGHTS):
+    research → 0.7 authority + 0.3 relevance
+    empower  → 0.5 authority + 0.5 relevance
 """
 
 from __future__ import annotations
 
 import re
 
-from app.config import COURT_WEIGHTS, CURRENT_YEAR, RECENCY_DECAY_RATE, RECENCY_MAX_BOOST
+from app.config import (
+    get_court_weight,
+    CURRENT_YEAR,
+    RECENCY_DECAY_RATE,
+    RECENCY_MAX_BOOST,
+    SCORE_WEIGHTS,
+)
 from app.models.schemas import CaseRecord
 
 
@@ -16,24 +29,50 @@ from app.models.schemas import CaseRecord
 # Public API
 # ---------------------------------------------------------------------------
 
-def compute_score(case: CaseRecord, query_tokens: list[str]) -> tuple[float, dict]:
-    """Return (total_score, breakdown_dict) for a given case against the query."""
+def compute_score(
+    case: CaseRecord,
+    query_tokens: list[str],
+    mode: str = "research",
+) -> tuple[float, dict]:
+    """
+    Return (final_score, breakdown_dict) for a case against the query.
 
-    court_weight = _court_weight(case.court)
-    citation_score = _citation_score(case.citation_count)
-    recency_boost = _recency_boost(case.year)
-    relevance_score = _relevance_score(case, query_tokens)
+    Parameters
+    ----------
+    case : CaseRecord
+    query_tokens : list of normalized search tokens
+    mode : "research" or "empower" — determines weighting
+    """
 
-    total = (court_weight * 3) + (citation_score) + recency_boost + relevance_score
+    court_w = _court_weight(case.court)
+    citation_s = _citation_score(case.citation_count)
+    recency_b = _recency_boost(case.year)
+    relevance_s = _relevance_score(case, query_tokens)
+
+    # ---- Dual scores ----
+    authority_score = (court_w * 3) + citation_s
+    relevance_score = recency_b + relevance_s
+
+    # ---- Mode-weighted final score ----
+    weights = SCORE_WEIGHTS.get(mode, SCORE_WEIGHTS["research"])
+    final_score = (
+        weights["authority"] * authority_score
+        + weights["relevance"] * relevance_score
+    )
 
     breakdown = {
-        "court_weight": round(court_weight * 3, 2),
-        "citation_score": round(citation_score, 2),
-        "recency_boost": round(recency_boost, 2),
+        "authority_score": round(authority_score, 2),
         "relevance_score": round(relevance_score, 2),
+        "final_score": round(final_score, 2),
+        "mode": mode,
+        # Component detail
+        "court_weight": round(court_w * 3, 2),
+        "citation_score": round(citation_s, 2),
+        "recency_boost": round(recency_b, 2),
+        "query_overlap": round(relevance_s, 2),
     }
 
-    return round(total, 2), breakdown
+    return round(final_score, 2), breakdown
 
 
 def tokenize_query(query: str) -> list[str]:
@@ -46,8 +85,8 @@ def tokenize_query(query: str) -> list[str]:
 # ---------------------------------------------------------------------------
 
 def _court_weight(court: str) -> int:
-    """Map court name → integer weight."""
-    return COURT_WEIGHTS.get(court, 4)
+    """Map court name → integer weight using pattern matching."""
+    return get_court_weight(court)
 
 
 def _citation_score(citation_count: int) -> float:
