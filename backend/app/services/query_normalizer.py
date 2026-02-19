@@ -6,19 +6,29 @@ Transforms citizen-language queries into effective search terms.
 Pipeline:
     Raw query → Lowercase → Remove stopwords → Expand synonyms → Detect domain → Output
 
+If deterministic keyword matching fails (returns "General Legal Issue"),
+the LLM is used as a fallback to classify the legal domain and expand terms.
+
 Example:
     "My landlord refuses to return my deposit"
     → tokens: ["landlord", "refuses", "return", "deposit"]
     → expanded: ["landlord", "tenant", "refuses", "return", "deposit", "security deposit"]
     → domain: "Property Law"
+
+    "my city is very polluted"
+    → keywords fail → LLM classifies as "Environmental Law"
+    → expanded terms include: ["pollution", "environment", "ngt", ...]
 """
 
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass, field
 
 from app.config import STOPWORDS, LEGAL_SYNONYMS, ISSUE_KEYWORDS
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -50,7 +60,7 @@ def normalize_query(query: str) -> NormalizedQuery:
     1. Lowercase + tokenize
     2. Remove stopwords
     3. Expand synonyms
-    4. Detect legal domain
+    4. Detect legal domain (deterministic → LLM fallback)
     5. Build search string
     """
 
@@ -71,8 +81,25 @@ def normalize_query(query: str) -> NormalizedQuery:
                 expanded.append(syn)
                 seen.add(syn)
 
-    # Step 4: Detect legal domain
+    # Step 4: Detect legal domain (deterministic first)
     domain = _detect_domain(query)
+
+    # Step 4b: LLM fallback — if keywords couldn't classify, ask the LLM
+    if domain == "General Legal Issue":
+        try:
+            from app.services.llm_query_enhancer import llm_classify_query
+            llm_result = llm_classify_query(query)
+            if llm_result and llm_result.get("domain") != "General Legal Issue":
+                domain = llm_result["domain"]
+                # Merge LLM-suggested search terms into expanded terms
+                for term in llm_result.get("search_terms", []):
+                    if term not in seen:
+                        expanded.append(term)
+                        seen.add(term)
+                logger.info(f"LLM enhanced query: domain={domain}, "
+                            f"new terms={llm_result.get('search_terms', [])}")
+        except Exception as e:
+            logger.warning(f"LLM fallback failed, using deterministic: {e}")
 
     return NormalizedQuery(
         raw_query=query,
@@ -83,7 +110,7 @@ def normalize_query(query: str) -> NormalizedQuery:
 
 
 # ---------------------------------------------------------------------------
-# Domain Detection
+# Domain Detection (deterministic)
 # ---------------------------------------------------------------------------
 
 def _detect_domain(query: str) -> str:
