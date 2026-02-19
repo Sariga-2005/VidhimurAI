@@ -105,21 +105,28 @@ def _recency_boost(year: int) -> float:
 
 
 def _relevance_score(case: CaseRecord, query_tokens: list[str]) -> float:
-    """Keyword overlap ratio × 10.
+    """Keyword overlap score.
 
     Checks keywords, legal_issues, case_name, and summary for matches.
+    Handles both single tokens and multi-word phrases (e.g. "sexual harassment").
     """
     if not query_tokens:
         return 0.0
 
-    # Build a bag of words from the case's searchable fields
+    # Build a searchable text blob from the case
     case_text = " ".join([
         case.case_name.lower(),
         case.summary.lower(),
         " ".join(k.lower() for k in case.keywords),
         " ".join(i.lower() for i in case.legal_issues),
+        " ".join(s.lower() for s in case.statutes_referenced),
     ])
 
-    matches = sum(1 for token in query_tokens if token in case_text)
+    # Count matches — both single tokens and multi-word phrases
+    matches = 0
+    for token in query_tokens:
+        if token in case_text:
+            matches += 1
+
     ratio = matches / len(query_tokens)
     return round(ratio * 10, 2)

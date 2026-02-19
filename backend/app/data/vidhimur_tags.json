@@ -1,18 +1,14 @@
 {
     "1569253": {
         "keywords": [
+            "doctrine",
             "constitution",
             "basic structure",
-            "fundamental rights",
-            "article 368",
-            "amendment power",
-            "constitutional"
+            "basic structure doctrine"
         ],
-        "outcome": "Petition partially allowed; basic structure doctrine established",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Constitutional amendment limits",
-            "Basic structure doctrine",
-            "Judicial review"
+            "Basic structure doctrine"
         ],
         "statutes_referenced": [
             "Constitution of India, Article 368",
@@ -22,41 +18,37 @@
     },
     "1712542": {
         "keywords": [
+            "article",
+            "right",
+            "liberty",
             "right to life",
-            "personal liberty",
-            "article 21",
-            "due process",
-            "fundamental rights",
-            "constitutional"
+            "personal liberty"
         ],
-        "outcome": "Petition allowed; passport impounding quashed",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Right to life and personal liberty",
-            "Due process",
-            "Natural justice"
+            "Constitutional Law",
+            "Right to life and personal liberty"
         ],
         "statutes_referenced": [
-            "Constitution of India, Article 21",
-            "Passport Act, 1967"
+            "Constitution of India, Article 21"
         ]
     },
     "1032145": {
         "keywords": [
-            "sexual harassment",
+            "vishaka",
+            "sexual",
+            "harassment",
+            "women",
             "workplace",
-            "women rights",
-            "fundamental rights",
-            "article 14",
-            "article 19",
-            "article 21"
+            "sexual harassment"
         ],
-        "outcome": "Guidelines issued for prevention of sexual harassment at workplace",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Sexual harassment at workplace",
-            "Gender equality",
-            "Fundamental rights of women"
+            "Labor Law",
+            "Sexual harassment at workplace"
         ],
         "statutes_referenced": [
+            "Sexual Harassment of Women at Workplace Act, 2013",
             "Constitution of India, Article 14",
             "Constitution of India, Article 19(1)(g)",
             "Constitution of India, Article 21"
@@ -64,86 +56,68 @@
     },
     "127517806": {
         "keywords": [
+            "right",
             "privacy",
-            "fundamental rights",
-            "data protection",
-            "article 21",
-            "surveillance",
-            "constitutional",
-            "digital"
+            "fundamental",
+            "right to privacy"
         ],
-        "outcome": "Right to privacy declared a fundamental right",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Right to privacy",
-            "Data protection",
-            "Aadhaar validity"
+            "Right to privacy"
         ],
         "statutes_referenced": [
             "Constitution of India, Article 14",
             "Constitution of India, Article 19",
-            "Constitution of India, Article 21",
-            "Aadhaar Act, 2016"
+            "Constitution of India, Article and 21",
+            "Constitution of India, Article 21"
         ]
     },
     "166827725": {
         "keywords": [
-            "section 377",
-            "lgbtq",
-            "right to equality",
-            "article 14",
-            "article 15",
-            "personal liberty",
-            "constitutional"
+            "decriminalized"
         ],
-        "outcome": "Section 377 IPC partially struck down",
+        "outcome": "Decriminalized consensual homosexual acts by reading down Section 377 of the Indian Penal Code",
         "legal_issues": [
-            "Decriminalization of homosexuality",
-            "Right to equality",
-            "Right to privacy"
+            "LGBTQ+ rights",
+            "Decriminalization of homosexuality"
         ],
         "statutes_referenced": [
+            "Indian Penal Code, 1860",
             "Indian Penal Code, Section 377",
             "Constitution of India, Article 14",
             "Constitution of India, Article 15",
-            "Constitution of India, Article 21"
+            "Constitution of India, Article 21",
+            "Section 377"
         ]
     },
     "8000001": {
         "keywords": [
-            "eviction",
-            "tenant",
             "landlord",
-            "rent control",
-            "property",
-            "due process",
-            "possession"
+            "eviction"
         ],
-        "outcome": "Eviction notice set aside; tenant's rights upheld",
+        "outcome": "The Bombay High Court set aside the landlord's eviction notice, ruling that",
         "legal_issues": [
-            "Tenant eviction",
-            "Rent control",
-            "Due process in property disputes"
+            "Property Law",
+            "Tenant eviction"
         ],
         "statutes_referenced": [
-            "Maharashtra Rent Control Act, 1999",
             "Transfer of Property Act, 1882"
         ]
     },
     "9000001": {
         "keywords": [
             "consumer",
-            "real estate",
-            "delayed possession",
-            "compensation",
-            "deficiency",
-            "service",
-            "flat"
+            "complaint",
+            "possession",
+            "flat",
+            "delayed possession"
         ],
-        "outcome": "Compensation of Rs. 5 lakhs awarded; possession directed within 3 months",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Deficiency of service",
-            "Delayed possession",
-            "Consumer rights in real estate"
+            "Property Law",
+            "Consumer Protection",
+            "Consumer rights dispute",
+            "Consumer - delayed delivery"
         ],
         "statutes_referenced": [
             "Consumer Protection Act, 2019",
@@ -154,37 +128,30 @@
         "keywords": [
             "consumer",
             "defective",
-            "product",
-            "warranty",
-            "refund",
-            "compensation",
-            "goods"
+            "warranty"
         ],
-        "outcome": "Full refund ordered with Rs. 50,000 compensation",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Defective product",
-            "Warranty claims",
-            "Consumer compensation"
+            "Consumer Protection",
+            "Consumer - defective product"
         ],
         "statutes_referenced": [
-            "Consumer Protection Act, 2019",
-            "Sale of Goods Act, 1930"
+            "Consumer Protection Act, 2019"
         ]
     },
     "8000002": {
         "keywords": [
+            "domestic",
+            "violence",
+            "protection",
+            "order",
             "domestic violence",
-            "protection order",
-            "women rights",
-            "economic abuse",
-            "marriage",
-            "family"
+            "protection order"
         ],
-        "outcome": "Protection order upheld; definition of domestic violence expanded",
+        "outcome": "Domestic violence case where the Gujarat High Court upheld the Magistrate's protection order",
         "legal_issues": [
             "Domestic violence",
-            "Economic abuse",
-            "Protection orders"
+            "Domestic violence / protection orders"
         ],
         "statutes_referenced": [
             "Protection of Women from Domestic Violence Act, 2005",
@@ -194,107 +161,85 @@
     "8000003": {
         "keywords": [
             "cyber",
+            "unauthorized",
+            "access",
+            "trade",
+            "secrets",
             "hacking",
-            "data",
             "trade secrets",
-            "information technology",
-            "it act",
-            "unauthorized access",
-            "digital"
+            "unauthorized access"
         ],
-        "outcome": "Rs. 2 crore damages awarded; criminal prosecution directed",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Cyber crime",
-            "Data theft",
-            "Trade secret misappropriation"
+            "Cyber Law",
+            "Trade secret misappropriation",
+            "Cyber crime"
         ],
         "statutes_referenced": [
-            "Information Technology Act, 2000, Section 43",
             "Information Technology Act, 2000, Section 66",
+            "Information Technology Act, 2000, Section 43",
             "Indian Penal Code, Section 379"
         ]
     },
     "7000001": {
         "keywords": [
-            "environment",
-            "forest",
-            "highway",
-            "pollution",
-            "ecological",
+            "green",
             "pil",
-            "green tribunal",
-            "wildlife"
+            "construction",
+            "forest"
         ],
-        "outcome": "Construction halted; mandatory EIA ordered",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Environmental clearance",
-            "Forest conservation",
-            "Public interest litigation"
+            "Environmental Law",
+            "Forest conservation"
         ],
         "statutes_referenced": [
-            "Forest Conservation Act, 1980",
             "Environment Protection Act, 1986",
-            "National Green Tribunal Act, 2010"
+            "Forest Conservation Act, 1980"
         ]
     },
     "8000004": {
         "keywords": [
-            "retrenchment",
-            "worker",
             "industrial",
-            "labour",
-            "wages",
-            "termination",
-            "employment",
-            "employer"
+            "retrenchment",
+            "factory",
+            "industrial dispute"
         ],
-        "outcome": "Retrenchment declared illegal; reinstatement with back wages ordered",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Unlawful retrenchment",
-            "Workers' rights",
-            "Industrial disputes"
+            "Labor Law",
+            "Industrial labor dispute"
         ],
         "statutes_referenced": [
-            "Industrial Disputes Act, 1947",
-            "Factories Act, 1948"
+            "Industrial Disputes Act, 1947"
         ]
     },
     "9000003": {
         "keywords": [
+            "bank",
             "termination",
-            "employment",
-            "natural justice",
-            "employer",
-            "dismissal",
-            "worker",
-            "workplace"
+            "wrongful termination"
         ],
-        "outcome": "Termination set aside; employee reinstated with partial back wages",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Wrongful termination",
-            "Natural justice",
-            "Employment rights"
+            "Wrongful termination"
         ],
         "statutes_referenced": [
-            "Industrial Disputes Act, 1947",
-            "Constitution of India, Article 311"
+            "Industrial Disputes Act, 1947"
         ]
     },
     "8000005": {
         "keywords": [
-            "pension",
+            "writ",
+            "petition",
             "widow",
-            "social welfare",
-            "writ petition",
-            "article 21",
-            "fundamental rights",
-            "constitutional"
+            "pension",
+            "writ petition"
         ],
-        "outcome": "State directed to grant pension within 4 weeks",
+        "outcome": "The Allahabad High Court directed",
         "legal_issues": [
-            "Social welfare rights",
-            "Pension entitlement",
-            "Government accountability"
+            "Social welfare / pension",
+            "Social welfare / pension rights"
         ],
         "statutes_referenced": [
             "Constitution of India, Article 21",
@@ -303,22 +248,17 @@
     },
     "8000006": {
         "keywords": [
-            "property",
-            "construction",
-            "demolition",
             "municipal",
-            "encroachment",
-            "land",
-            "possession"
+            "demolition",
+            "unauthorized",
+            "construction",
+            "authorized construction"
         ],
-        "outcome": "Demolition order upheld; writ petition dismissed",
+        "outcome": "The Bombay High Court upheld",
         "legal_issues": [
-            "Unauthorized construction",
-            "Municipal authority powers",
-            "Property rights"
+            "Property / construction dispute"
         ],
         "statutes_referenced": [
-            "Maharashtra Regional and Town Planning Act, 1966",
             "Constitution of India, Article 300A"
         ]
     },
@@ -326,17 +266,12 @@
         "keywords": [
             "criminal",
             "terrorism",
-            "conspiracy",
-            "death sentence",
-            "ipc",
-            "arrest",
-            "imprisonment"
+            "conspiracy"
         ],
-        "outcome": "Conviction and death sentence upheld",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Terrorism charges",
-            "Standard of proof",
-            "Death penalty"
+            "Terrorism / national security",
+            "Criminal conspiracy"
         ],
         "statutes_referenced": [
             "Indian Penal Code, Section 120B",
@@ -348,38 +283,29 @@
         "keywords": [
             "bail",
             "cheating",
-            "forgery",
-            "criminal",
-            "speedy trial",
-            "crpc",
-            "fraud"
+            "forgery"
         ],
-        "outcome": "Bail granted on furnishing personal bond of Rs. 1 lakh",
+        "outcome": "The High Court granted bail",
         "legal_issues": [
+            "Criminal Law",
             "Bail jurisprudence",
-            "Right to speedy trial",
-            "Cheating and forgery"
+            "Criminal fraud"
         ],
         "statutes_referenced": [
-            "Code of Criminal Procedure, Section 439",
             "Indian Penal Code, Section 420",
-            "Indian Penal Code, Section 468"
+            "Indian Penal Code, Section 468",
+            "Code of Criminal Procedure, Section 439"
         ]
     },
     "8000008": {
         "keywords": [
             "customs",
-            "import",
-            "goods",
-            "trade",
             "assessment",
-            "tariff"
+            "goods"
         ],
-        "outcome": "Customs assessment set aside; reassessment ordered",
+        "outcome": "The High Court found",
         "legal_issues": [
-            "Customs classification",
-            "Tariff interpretation",
-            "Import duties"
+            "Customs/tariff dispute"
         ],
         "statutes_referenced": [
             "Customs Act, 1962",
@@ -389,146 +315,108 @@
     "9000004": {
         "keywords": [
             "divorce",
-            "custody",
+            "petition",
             "cruelty",
             "desertion",
-            "marriage",
-            "child",
-            "maintenance",
-            "matrimonial",
             "family"
         ],
-        "outcome": "Divorce granted; child custody to mother; maintenance of Rs. 15,000/month ordered",
+        "outcome": "The Family Court granted divorce",
         "legal_issues": [
-            "Divorce on grounds of cruelty",
-            "Child custody",
-            "Maintenance"
+            "Matrimonial dispute"
         ],
         "statutes_referenced": [
-            "Hindu Marriage Act, 1955",
-            "Hindu Adoptions and Maintenance Act, 1956",
-            "Guardians and Wards Act, 1890"
+            "Hindu Marriage Act, 1955"
         ]
     },
     "9000005": {
         "keywords": [
             "pollution",
-            "environment",
-            "factory",
-            "emission",
-            "waste",
-            "ecological",
-            "green tribunal"
+            "complaint",
+            "factory"
         ],
-        "outcome": "Factory closure ordered; Rs. 10 lakhs environmental compensation imposed",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Industrial pollution",
-            "Environmental clearance",
-            "Community rights"
+            "Environmental violation"
         ],
         "statutes_referenced": [
-            "Environment Protection Act, 1986",
-            "Air (Prevention and Control of Pollution) Act, 1981"
+            "Environment Protection Act, 1986"
         ]
     },
     "8000009": {
         "keywords": [
             "bank",
-            "loan",
-            "secured assets",
-            "property",
-            "possession",
-            "commercial"
+            "commercial",
+            "act"
         ],
-        "outcome": "Bank's possession proceedings stayed; fresh notice directed",
-        "legal_issues": [
-            "Secured creditor rights",
-            "SARFAESI Act compliance",
-            "Borrower protection"
-        ],
+        "outcome": "Outcome not determinable from headline",
+        "legal_issues": [],
         "statutes_referenced": [
-            "SARFAESI Act, 2002",
-            "Recovery of Debts Due to Banks Act, 1993"
+            "SARFAESI Act, 2002"
         ]
     },
     "7000003": {
         "keywords": [
-            "medical negligence",
             "hospital",
-            "compensation",
-            "consumer",
-            "deficiency",
-            "service"
+            "medical",
+            "negligence",
+            "medical negligence"
         ],
-        "outcome": "Rs. 25 lakhs compensation awarded to patient's family",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Medical negligence",
-            "Standard of care",
-            "Expert evidence in medical cases"
+            "Medical negligence / standard of care"
         ],
         "statutes_referenced": [
-            "Consumer Protection Act, 2019",
-            "Indian Medical Council Act, 1956"
+            "Consumer Protection Act, 2019"
         ]
     },
     "8000010": {
         "keywords": [
-            "data",
-            "privacy",
             "digital",
-            "information technology",
-            "internet",
-            "cyber",
-            "it act"
+            "order",
+            "data",
+            "service",
+            "data localization"
         ],
-        "outcome": "Government data localization order upheld",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Data localization",
-            "Digital rights",
-            "Government regulation of technology"
+            "Cyber Law",
+            "Data governance"
         ],
         "statutes_referenced": [
             "Information Technology Act, 2000",
-            "Digital Personal Data Protection Act, 2023",
-            "Constitution of India, Article 19(1)(g)"
+            "Digital Personal Data Protection Act, 2023"
         ]
     },
     "7000004": {
         "keywords": [
+            "habeas",
+            "corpus",
+            "petition",
             "detention",
+            "public",
+            "act",
             "habeas corpus",
-            "liberty",
-            "article 22",
-            "fundamental rights",
-            "arrest",
-            "constitutional"
+            "preventive detention"
         ],
-        "outcome": "Detention order quashed; immediate release directed",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
             "Preventive detention",
-            "Personal liberty",
-            "Habeas corpus"
+            "Habeas corpus / personal liberty"
         ],
         "statutes_referenced": [
+            "Constitution of India, Article 21",
             "Constitution of India, Article 22",
-            "Jammu & Kashmir Public Safety Act, 1978",
-            "Constitution of India, Article 21"
+            "Jammu & Kashmir Public Safety Act, 1978"
         ]
     },
     "9000006": {
         "keywords": [
-            "women rights",
-            "financial inclusion",
-            "loan",
-            "employment",
-            "worker",
-            "social welfare"
+            "women",
+            "credit"
         ],
-        "outcome": "Loan applications ordered to be processed within 6 weeks",
+        "outcome": "Outcome not determinable from headline",
         "legal_issues": [
-            "Financial inclusion",
-            "Women's economic rights",
-            "Government scheme implementation"
+            "Financial inclusion"
         ],
         "statutes_referenced": [
             "Constitution of India, Article 14",

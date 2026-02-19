@@ -79,7 +79,9 @@ LEGAL_SYNONYMS: dict[str, list[str]] = {
     "wages": ["salary", "remuneration"],
     "divorce": ["marriage", "matrimonial", "custody"],
     "custody": ["child", "guardianship", "divorce"],
-    "harassment": ["sexual harassment", "workplace", "stalking"],
+    "harassment": ["sexual harassment", "workplace", "stalking", "vishaka"],
+    "harrassment": ["sexual harassment", "workplace", "stalking", "vishaka"],
+    "office": ["workplace", "employer", "employment"],
     "hacking": ["cyber", "unauthorized access", "data theft"],
     "privacy": ["data protection", "surveillance", "personal data"],
     "pollution": ["environment", "emission", "waste"],
@@ -89,6 +91,9 @@ LEGAL_SYNONYMS: dict[str, list[str]] = {
     "bail": ["arrest", "custody", "remand"],
     "property": ["land", "real estate", "immovable"],
     "fraud": ["cheating", "forgery", "misrepresentation"],
+    "boss": ["employer", "workplace", "superior"],
+    "bullying": ["harassment", "workplace", "intimidation"],
+    "molest": ["sexual harassment", "assault", "criminal"],
 }
 
 # ---------------------------------------------------------------------------
@@ -154,7 +159,9 @@ ISSUE_KEYWORDS: dict[str, list[str]] = {
     "Labor Law": [
         "employment", "worker", "wages", "termination", "industrial",
         "labour", "labor", "retrenchment", "gratuity", "provident fund",
-        "workplace", "dismissal", "employer",
+        "workplace", "dismissal", "employer", "harassment", "harrassment",
+        "sexual harassment", "office", "bullying", "posh", "vishaka",
+        "hostile work", "boss", "superior", "molest",
     ],
     "Cyber Law": [
         "cyber", "data", "privacy", "online", "internet", "hacking",
