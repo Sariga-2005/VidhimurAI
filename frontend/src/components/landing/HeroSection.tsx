@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom'
 import Button from '../ui/Button'
 import { useTranslation } from '../../i18n/useTranslation'
 
 const HeroSection = () => {
     const { t } = useTranslation()
+    const navigate = useNavigate()
 
     return (
         <section
@@ -32,10 +34,10 @@ const HeroSection = () => {
                 <div
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5"
                 >
-                    <Button variant="secondary" size="lg" className="min-w-64">
+                    <Button variant="secondary" size="lg" className="min-w-64" onClick={() => navigate('/empower')}>
                         {t('hero.cta2')}
                     </Button>
-                    <Button variant="primary" size="lg" className="min-w-64">
+                    <Button variant="primary" size="lg" className="min-w-64" onClick={() => navigate('/research')}>
                         {t('hero.cta1')}
                     </Button>
                 </div>

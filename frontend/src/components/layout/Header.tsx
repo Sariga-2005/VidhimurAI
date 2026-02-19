@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from '../../i18n/useTranslation'
 import LanguageSelector from '../ui/LanguageSelector'
 
@@ -24,16 +25,16 @@ const Header = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16 sm:h-20">
                     {/* Brand (Text Only) */}
-                    <div className="flex items-center gap-3">
+                    <Link to="/" className="flex items-center gap-3 group">
                         <div>
-                            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-official-900">
+                            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-official-900 group-hover:text-brand transition-colors">
                                 {t('header.brand')}
                             </h1>
                             <p className="text-[10px] sm:text-xs text-official-500 tracking-widest uppercase mt-0.5">
                                 {t('header.tagline')}
                             </p>
                         </div>
-                    </div>
+                    </Link>
 
                     {/* Nav Links */}
                     <nav className="hidden md:flex items-center gap-8">
@@ -50,6 +51,12 @@ const Header = () => {
                                 {t(`header.nav.${item.key}`)}
                             </a>
                         ))}
+                        <Link to="/research" className="text-sm text-official-600 hover:text-brand transition-colors font-medium">
+                            {t('header.nav.research')}
+                        </Link>
+                        <Link to="/empower" className="text-sm text-official-600 hover:text-brand transition-colors font-medium">
+                            {t('header.nav.empower')}
+                        </Link>
                         <LanguageSelector />
                     </nav>
 

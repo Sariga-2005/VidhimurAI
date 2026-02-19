@@ -6,7 +6,9 @@
             "about": "About",
             "features": "Features",
             "useCases": "Use Cases",
-            "getStarted": "Get Started"
+            "getStarted": "Get Started",
+            "research": "Research",
+            "empower": "Empower"
         },
         "menu": "MENU"
     },
@@ -57,5 +59,41 @@
     "footer": {
         "copyright": "© {year} VidhimurAI. All rights reserved. This platform is for informational purposes only and does not constitute legal advice.",
         "madeIn": "🇮🇳 Made in India"
+    },
+    "research": {
+        "title": "Research",
+        "heading1": "Legal Case",
+        "heading2": "Research",
+        "subtitle": "Search India's legal cases with deterministic ranking and authority scoring",
+        "placeholder": "Describe your legal query, e.g. \"landlord tenant deposit dispute\"",
+        "searchBtn": "Search",
+        "advancedFilters": "Advanced Filters",
+        "filterCourt": "Court",
+        "allCourts": "All Courts",
+        "filterYearFrom": "Year From",
+        "filterYearTo": "Year To",
+        "searching": "Searching cases…",
+        "resultsFound": "{count} cases found",
+        "mostInfluential": "Most Influential",
+        "authority": "Authority",
+        "relevance": "Relevance",
+        "noResults": "No cases matched your query. Try different keywords.",
+        "emptyState": "Enter a legal query to search relevant cases"
+    },
+    "empower": {
+        "title": "Empower",
+        "heading1": "Citizen Legal",
+        "heading2": "Empowerment",
+        "subtitle": "Describe your legal issue and receive precedent-backed analysis and actionable guidance",
+        "placeholder": "Describe your legal situation, e.g. \"My employer fired me without notice after 3 years of service\"",
+        "contextPlaceholder": "Any additional context? (optional, e.g. city, date, industry)",
+        "analyzeBtn": "Analyze My Case",
+        "analyzing": "Analyzing your case…",
+        "issueType": "Issue Classification",
+        "legalStrength": "Legal Strength",
+        "relevantSections": "Relevant Legal Sections",
+        "precedents": "Supporting Precedents",
+        "actionRoadmap": "Action Roadmap",
+        "emptyState": "Describe your legal issue to get empowerment analysis"
     }
 }
