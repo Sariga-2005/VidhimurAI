@@ -4,7 +4,6 @@ import { searchCases } from '../services/api'
 import type { CaseResult, SearchResponse, SearchFilters } from '../services/api'
 import { useTranslation } from '../i18n/useTranslation'
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition'
-import LanguageSelector from '../components/ui/LanguageSelector'
 
 const ResearchPage = () => {
     const { t } = useTranslation()
@@ -126,7 +125,6 @@ const ResearchPage = () => {
                             <Link to="/empower" className="text-sm text-official-600 hover:text-brand font-medium transition-colors">
                                 {t('header.nav.empower')}
                             </Link>
-                            <LanguageSelector />
                         </div>
                     </div>
                 </div>
@@ -161,8 +159,8 @@ const ResearchPage = () => {
                                         type="button"
                                         onClick={toggleListening}
                                         className={`flex items-center justify-center px-3 transition-all duration-300 ${isListening
-                                            ? 'text-red-500 animate-pulse'
-                                            : 'text-official-400 hover:text-brand'
+                                                ? 'text-red-500 animate-pulse'
+                                                : 'text-official-400 hover:text-brand'
                                             }`}
                                         title={isListening ? 'Stop listening' : 'Voice input'}
                                     >

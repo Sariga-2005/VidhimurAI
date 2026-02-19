@@ -4,7 +4,6 @@ import { analyzeEmpowerment } from '../services/api'
 import type { EmpowerResponse, CaseResult } from '../services/api'
 import { useTranslation } from '../i18n/useTranslation'
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition'
-import LanguageSelector from '../components/ui/LanguageSelector'
 
 const EmpowerPage = () => {
     const { t } = useTranslation()
@@ -76,7 +75,6 @@ const EmpowerPage = () => {
                             <Link to="/research" className="text-sm text-official-600 hover:text-brand font-medium transition-colors">
                                 {t('header.nav.research')}
                             </Link>
-                            <LanguageSelector />
                         </div>
                     </div>
                 </div>
@@ -108,8 +106,8 @@ const EmpowerPage = () => {
                                         type="button"
                                         onClick={toggleListening}
                                         className={`absolute top-4 right-4 p-1.5 rounded-full transition-all duration-300 ${isListening
-                                            ? 'text-red-500 bg-red-50 animate-pulse'
-                                            : 'text-official-400 hover:text-brand hover:bg-official-50'
+                                                ? 'text-red-500 bg-red-50 animate-pulse'
+                                                : 'text-official-400 hover:text-brand hover:bg-official-50'
                                             }`}
                                         title={isListening ? 'Stop listening' : 'Voice input'}
                                     >
