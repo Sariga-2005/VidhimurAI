@@ -55,7 +55,13 @@ print("====================")
 import json
 translator = Translator()
 result = translator.translate("This is a legal complaint draft.", "Hindi")
-print(json.dumps(result, ensure_ascii=True))
+
+if result:
+    print("\nReadable Hindi Text:")
+    print(result["translated_text"])
+
+    print("\nPretty JSON:")
+    print(json.dumps(result, indent=2, ensure_ascii=False))
 
 print("\n====================")
 print("Testing ResearchAIEnhancer")
