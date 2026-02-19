@@ -76,7 +76,7 @@ const EmpowerPage = () => {
                 </span>
             </div>
             <p className="text-sm text-official-500 leading-relaxed line-clamp-2">{c.summary}</p>
-            {c.kanoon_tid && (
+            {(c.kanoon_tid ?? 0) > 0 && (
                 <a href={`https://indiankanoon.org/doc/${c.kanoon_tid}/`} target="_blank" rel="noopener noreferrer" className="inline-block mt-3 text-xs text-brand hover:text-brand-dark font-medium transition-colors">
                     View on Indian Kanoon →
                 </a>

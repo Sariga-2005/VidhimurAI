@@ -126,13 +126,18 @@ def _relevance_score(case: CaseRecord, query_tokens: list[str]) -> float:
         " ".join(s.lower() for s in case.statutes_referenced),
     ])
 
-    # Count matches — both single tokens and multi-word phrases
-    matches = 0
+    # Count matches — weighted!
+    # Phrases (e.g. "sexual harassment") get 3x weight vs single words
+    score_points = 0.0
     for token in query_tokens:
         if token in case_text:
-            matches += 1
+            if " " in token:
+                score_points += 3.0  # Big boost for specific legal phrases
+            else:
+                score_points += 1.0
 
-    ratio = matches / len(query_tokens)
+    # Denominator is still just len(tokens) to allow score > 100 for great matches
+    ratio = score_points / len(query_tokens)
 
-    # Boost: Scale 0-1 ratio to 0-100 score
+    # Scale 0-1 ratio to 0-100 score (can exceed 100 now, which is good)
     return round(ratio * 100, 2)

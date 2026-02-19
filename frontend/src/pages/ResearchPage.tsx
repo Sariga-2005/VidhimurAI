@@ -98,7 +98,7 @@ const ResearchPage = () => {
                     <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
                     <span className="text-xs text-official-500">{t('research.relevance')}: <strong className="text-official-700">{c.relevance_score.toFixed(1)}</strong></span>
                 </div>
-                {c.kanoon_tid && (
+                {(c.kanoon_tid ?? 0) > 0 && (
                     <a
                         href={`https://indiankanoon.org/doc/${c.kanoon_tid}/`}
                         target="_blank"
