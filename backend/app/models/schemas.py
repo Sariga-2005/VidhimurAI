@@ -13,6 +13,7 @@ class CaseRecord(BaseModel):
     """Raw case as stored in the local JSON dataset."""
 
     id: str
+    kanoon_tid: int | None = None
     case_name: str
     court: str
     year: int
@@ -58,6 +59,7 @@ class EmpowerRequest(BaseModel):
 class CaseResult(BaseModel):
     """Single case in the research results."""
 
+    kanoon_tid: int | None = None
     case_name: str
     court: str
     year: int

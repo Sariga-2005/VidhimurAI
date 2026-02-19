@@ -8,6 +8,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 CASES_FILE = DATA_DIR / "cases.json"
+KANOON_CASES_FILE = DATA_DIR / "kanoon_cases.json"
 
 # ---------------------------------------------------------------------------
 # Court weights used by the ranking engine

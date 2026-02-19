@@ -6,29 +6,9 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-from app.config import CASES_FILE
 from app.models.schemas import CaseRecord, CaseResult, SearchFilters, SearchResponse
 from app.services.ranking import compute_score, tokenize_query
-
-
-# ---------------------------------------------------------------------------
-# Dataset loader (cached)
-# ---------------------------------------------------------------------------
-
-@lru_cache(maxsize=1)
-def _load_cases(path: str | None = None) -> list[CaseRecord]:
-    """Load and parse cases from JSON.  Cached after first call."""
-    file_path = Path(path) if path else CASES_FILE
-    if not file_path.exists():
-        raise FileNotFoundError(f"Dataset not found at {file_path}")
-    with open(file_path, encoding="utf-8") as f:
-        raw = json.load(f)
-    return [CaseRecord(**c) for c in raw]
-
-
-def get_all_cases() -> list[CaseRecord]:
-    """Public accessor for the full dataset."""
-    return _load_cases()
+from app.services.kanoon_adapter import get_all_cases
 
 
 # ---------------------------------------------------------------------------
@@ -77,6 +57,7 @@ def search_cases(query: str, filters: SearchFilters | None = None) -> SearchResp
     top_cases: list[CaseResult] = []
     for case, score, _bd in scored:
         top_cases.append(CaseResult(
+            kanoon_tid=case.kanoon_tid,
             case_name=case.case_name,
             court=case.court,
             year=case.year,

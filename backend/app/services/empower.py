@@ -5,7 +5,7 @@ from __future__ import annotations
 from app.config import ACTION_ROADMAPS, DEFAULT_ROADMAP, ISSUE_KEYWORDS
 from app.models.schemas import CaseRecord, CaseResult, EmpowerResponse
 from app.services.ranking import compute_score, tokenize_query
-from app.services.search import get_all_cases
+from app.services.kanoon_adapter import get_all_cases
 
 
 # ---------------------------------------------------------------------------
@@ -92,6 +92,7 @@ def analyze_empowerment(query: str, context: str | None = None) -> EmpowerRespon
     top_records: list[CaseRecord] = []
     for case, score in scored[:5]:
         top_precedents.append(CaseResult(
+            kanoon_tid=case.kanoon_tid,
             case_name=case.case_name,
             court=case.court,
             year=case.year,
