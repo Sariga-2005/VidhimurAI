@@ -143,6 +143,7 @@ TASKS:
 3. Suggest recommended_authority based on issue_type and action_steps.
 
 OUTPUT FORMAT (STRICT):
+Return a JSON object. Ensure all newlines within strings are escaped as \\n.
 {{
   "complaint_title": "string",
   "draft_text": "string",

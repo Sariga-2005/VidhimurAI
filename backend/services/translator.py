@@ -1,7 +1,7 @@
 import json
 import logging
-from typing import Dict, Optional, Any
-from backend.services.llm_service import LLMService
+from typing import Dict, Any
+from .llm_service import LLMService
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -31,11 +31,14 @@ class Translator:
             Dict[str, str]: A JSON object containing the translated text under the key "translated_text".
                             Returns an error message in the same format on failure.
         """
-        if not legal_draft:
+        if not isinstance(legal_draft, str) or not legal_draft.strip():
             return {"translated_text": "Error: No legal draft provided for translation."}
 
-        if not target_language:
+        if not isinstance(target_language, str) or not target_language.strip():
             return {"translated_text": "Error: No target language specified."}
+
+        legal_draft = legal_draft.strip()
+        target_language = target_language.strip()
 
         system_role = (
             "You are an expert legal translator. Your task is to translate legal documents accurately "
@@ -45,12 +48,16 @@ class Translator:
 
         prompt = (
             f"Please translate the following legal draft into {target_language}:\n\n"
-            f"\"{legal_draft}\"\n\n"
+            f"{legal_draft}\n\n"
             f"Strict Requirements:\n"
             f"1. Translate the text accurately into {target_language}.\n"
             f"2. Maintain the exact original formatting (markdown, bolding, lists, etc.).\n"
             f"3. Preserve the legal meaning and tone.\n"
-            f"4. Output ONLY valid JSON in the following format:\n"
+            f"4. Do NOT include explanations outside JSON.\n"
+            f"5. Do NOT include markdown formatting.\n"
+            f"6. Return ONLY a JSON object.\n"
+            f"7. Do NOT wrap JSON in backticks.\n"
+            f"8. Output ONLY valid JSON in the following format:\n"
             f"   {{\n"
             f"       \"translated_text\": \"<your translated text here>\"\n"
             f"   }}"
@@ -75,6 +82,14 @@ class Translator:
                 if "translated_text" not in data:
                     logger.error(f"Missing 'translated_text' key in response: {data}")
                     return {"translated_text": "Error: Helper service returned unexpected format."}
+                
+                if not isinstance(data["translated_text"], str):
+                    logger.error("Invalid response type: 'translated_text' is not a string.")
+                    return {"translated_text": "Error: Invalid response type."}
+
+                if len(data["translated_text"]) > 20000:
+                    logger.error("Translated text exceeded 20000 characters.")
+                    return {"translated_text": "Error: Translation too long."}
                 
                 return data
 

@@ -1,113 +1,103 @@
 import os
+import json
 import logging
-from typing import Optional, List, Dict, Any
-from openai import OpenAI, OpenAIError
+import re
+from pathlib import Path
+from typing import Optional
+from groq import Groq
+from dotenv import load_dotenv
 
-# Configure logging
+# Load .env file from the backend directory (parent of services)
+backend_env_path = Path(__file__).resolve().parent.parent / '.env'
+load_dotenv(dotenv_path=backend_env_path)
+
+# Also try root .env file (3 levels up)
+root_env_path = Path(__file__).resolve().parent.parent.parent / '.env'
+load_dotenv(dotenv_path=root_env_path)
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class LLMService:
     """
-    A production-ready service class for interacting with OpenAI's LLM.
-    Handles configuration, API calls, and graceful error handling.
+    Groq LLM Service using hosted open-source models.
     """
 
-    def __init__(self, model_name: str = "gpt-4o-mini"):
-        """
-        Initialize the LLMService.
-
-        Args:
-            model_name (str): The default model to use for completions.
-        """
-        self.api_key = os.getenv("OPENAI_API_KEY")
+    def __init__(self, model_name: str = "llama-3.3-70b-versatile"):
+        self.api_key = os.getenv("GROQ_API_KEY")
         self.model_name = model_name
-        
+        self.client = None
+
         if not self.api_key:
-            logger.warning("OPENAI_API_KEY environment variable is not set. LLM calls will fail.")
-        
-        # Initialize the OpenAI client
-        # The client will automatically look for OPENAI_API_KEY env var, 
-        # but explicit passing allows for flexibility if needed.
-        self.client = OpenAI(api_key=self.api_key)
+            logger.warning("GROQ_API_KEY not set.")
+        else:
+            self.client = Groq(api_key=self.api_key)
 
-    def generate_response(self, prompt: str, system_role: str = "You are a helpful assistant.") -> Optional[str]:
-        """
-        Generates a response from the LLM based on the provided prompt and system role.
+    def generate_response(
+        self,
+        prompt: str,
+        system_role: str = "You are a helpful assistant."
+    ) -> Optional[str]:
 
-        Args:
-            prompt (str): The user input or prompt for the LLM.
-            system_role (str): The system instruction to set the behavior of the LLM.
-
-        Returns:
-            Optional[str]: The generated response content, or None if an error occurs.
-        """
-        if not self.api_key:
-            logger.error("Attempted to call LLM without an API key.")
+        if not self.client:
+            logger.warning("Groq client not initialized.")
             return None
 
         try:
-            messages = [
-                {"role": "system", "content": system_role},
-                {"role": "user", "content": prompt}
-            ]
-
-            response = self.client.chat.completions.create(
+            completion = self.client.chat.completions.create(
                 model=self.model_name,
-                messages=messages,
-                temperature=0.3,  # Requirement: Temperature = 0.3
+                messages=[
+                    {"role": "system", "content": system_role},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.2
             )
 
-            if response.choices and response.choices[0].message:
-                return response.choices[0].message.content.strip()
-            
-            logger.warning("LLM response received but contained no content.")
-            return None
+            return completion.choices[0].message.content.strip()
 
-        except OpenAIError as e:
-            logger.error(f"OpenAI API Error: {str(e)}")
-            return None
         except Exception as e:
-            logger.error(f"Unexpected error in LLMService: {str(e)}")
+            logger.error(f"Groq API Error: {str(e)}")
             return None
 
-    def generate_json_response(self, prompt: str, system_role: str = "You are a helpful assistant.") -> Optional[str]:
-        """
-        Generates a response strictly in JSON format.
-        Useful for structured data extraction.
-        
-        Args:
-            prompt (str): The user input.
-            system_role (str): The system instruction.
-            
-        Returns:
-            Optional[str]: The JSON string response, or None on failure.
-        """
-        if not self.api_key:
-             logger.error("Attempted to call LLM without an API key.")
-             return None
+    def generate_json_response(
+        self,
+        prompt: str,
+        system_role: str = "You are a helpful assistant."
+    ) -> Optional[str]:
+
+        response = self.generate_response(prompt, system_role)
+        if not response:
+            return None
 
         try:
-            messages = [
-                {"role": "system", "content": system_role},
-                {"role": "user", "content": prompt}
-            ]
+            # Clean markdown if model adds it
+            cleaned = response.strip()
+            
+            # Remove markdown code blocks if present
+            if "```json" in cleaned:
+                cleaned = cleaned.split("```json")[1].split("```")[0].strip()
+            elif "```" in cleaned:
+                cleaned = cleaned.split("```")[1].split("```")[0].strip()
+            
+            # Use regex to find the first JSON object block if not already clean
+            json_match = re.search(r'\{.*\}', cleaned, re.DOTALL)
+            if json_match:
+                cleaned = json_match.group(0)
 
-            response = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=messages,
-                response_format={"type": "json_object"},
-                temperature=0.3,
-            )
+            # Attempt to validate JSON
+            json.loads(cleaned)
+            return cleaned
 
-            if response.choices and response.choices[0].message:
-                return response.choices[0].message.content.strip()
+        except json.JSONDecodeError:
+            # Attempt to fix common issues like newlines in strings
+            try:
+                # Replace literal newlines with space to make it valid JSON
+                # This sacrifices formatting slightly but ensures validity
+                fixed = cleaned.replace('\n', ' ').replace('\r', '')
+                json.loads(fixed)
+                return fixed
+            except:
+                pass
 
-            return None
-
-        except OpenAIError as e:
-            logger.error(f"OpenAI API Error (JSON mode): {str(e)}")
-            return None
-        except Exception as e:
-            logger.error(f"Unexpected error in LLMService (JSON mode): {str(e)}")
+            logger.error(f"Invalid JSON returned from Groq. Raw Response: {response}")
             return None

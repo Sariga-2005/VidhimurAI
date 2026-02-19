@@ -1,0 +1,34 @@
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+ERROR:backend.services.llm_service:Invalid JSON returned from Groq. Response: {
+  "simplified_summary": "The Court decided that to get bail, you must follow the rules exactly as they are written in the law. This means:
+* You have to meet all the conditions set by the law
+* You cannot miss any of the requirements
+* If you do not follow the rules exactly, you may not get bail
+The Court is strict about this to make sure everyone is treated fairly and that the law is applied correctly."
+}
+ERROR:backend.services.simplifier:LLM service returned None.
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\sem 6\VidhimurAI\VidhimurAI\backend\services\test_member3.py", line 51, in <module>
+    print(translator.translate("This is a legal complaint draft.", "Hindi"))
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 21-22: character maps to <undefined>
+
+====================
+Testing DraftGenerator
+====================
+{'complaint_title': 'Tenant Deposit Dispute Claim', 'draft_text': "Introduction: The plaintiff, as a tenant, is filing this complaint against the defendant, the landlord, for failure to return the deposit as per the terms of the tenancy agreement. Statement of Facts: The plaintiff had paid a deposit to the defendant at the commencement of the tenancy, which was to be returned at the end of the tenancy period, subject to any damages or losses incurred. However, the defendant has failed to return the deposit despite the plaintiff's request. Legal Grounds: The defendant's failure to return the deposit is in contravention of Section 108 of the Transfer of Property Act. Relief Sought: The plaintiff seeks an order directing the defendant to return the deposit with interest, and such other relief as this court deems fit. Closing and Signature Placeholder: Respectfully submitted, _____________________________", 'recommended_authority': 'Civil Court'}
+
+====================
+Testing Simplifier
+====================
+{'simplified_summary': 'Error: Unable to generate simplification from LLM.'}
+
+====================
+Testing Translator
+====================
