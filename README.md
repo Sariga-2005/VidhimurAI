@@ -308,7 +308,7 @@ Each LLM-powered service (DraftGenerator, Simplifier, Translator, etc.) is a sta
 
 - **Not a legal substitute**: This system provides guidance, not legal advice. Output should be reviewed by a qualified advocate before filing.
 - **Model dependency**: Output quality depends on the LLM (LLaMA 3.3 70B). Responses may vary and are not guaranteed to be legally accurate.
-- **Dataset scope**: Case retrieval is based on a curated local JSON dataset, not a comprehensive legal database. Coverage is limited to the cases included.
+- **Dataset scope**: The system currently uses a **dummy dataset** formatted to match the output structure of the [Indian Kanoon API](https://api.indiankanoon.org/). Since the dataset is small and not sourced from real-time API calls, the results may not be fully accurate or comprehensive. Once integrated with the live Indian Kanoon API, retrieval quality and coverage will improve significantly.
 - **Jurisdiction**: The system is designed for Indian law. Statute references and procedural guidance may not apply to other jurisdictions.
 - **No OCR or document upload**: The current system only accepts text input, not scanned documents or images.
 
