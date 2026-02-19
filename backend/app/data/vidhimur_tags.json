@@ -68,7 +68,6 @@
         "statutes_referenced": [
             "Constitution of India, Article 14",
             "Constitution of India, Article 19",
-            "Constitution of India, Article and 21",
             "Constitution of India, Article 21"
         ]
     },
@@ -421,6 +420,465 @@
         "statutes_referenced": [
             "Constitution of India, Article 14",
             "Constitution of India, Article 21"
+        ]
+    },
+    "1883474": {
+        "keywords": [
+            "landlord",
+            "tenant",
+            "rent",
+            "act",
+            "right",
+            "security",
+            "eviction",
+            "due process",
+            "rent control"
+        ],
+        "outcome": "The court established that tenants have a right to security of tenure and the landlord must prove bona fide need for eviction",
+        "legal_issues": [
+            "Property Law",
+            "Tenant eviction"
+        ],
+        "statutes_referenced": [
+            "Transfer of Property Act, 1882"
+        ]
+    },
+    "625438": {
+        "keywords": [
+            "security",
+            "deposit",
+            "tenant",
+            "landlord",
+            "termination",
+            "refund",
+            "interest"
+        ],
+        "outcome": "The court held that a landlord is bound to refund the security deposit after the tenant vacates the premises, and failure to do so entitles the tenant to claim interest",
+        "legal_issues": [
+            "Property Law"
+        ],
+        "statutes_referenced": []
+    },
+    "1519371": {
+        "keywords": [
+            "judgment",
+            "right",
+            "information",
+            "act",
+            "surveillance"
+        ],
+        "outcome": "The court directed that examination answer sheets are personal information of the candidate",
+        "legal_issues": [],
+        "statutes_referenced": [
+            "the Right to Information Act, 2005"
+        ]
+    },
+    "112896520": {
+        "keywords": [
+            "right",
+            "information",
+            "act",
+            "public"
+        ],
+        "outcome": "The court held that the Registrar of Companies is a public authority under the RTI Act and must disclose information relating to company filings and compliance",
+        "legal_issues": [],
+        "statutes_referenced": []
+    },
+    "1577526": {
+        "keywords": [
+            "compensation",
+            "principles"
+        ],
+        "outcome": "The court held that the multiplier method should be applied based on age and income of the deceased",
+        "legal_issues": [],
+        "statutes_referenced": []
+    },
+    "784257": {
+        "keywords": [
+            "marriage",
+            "article"
+        ],
+        "outcome": "The court emphasized the need for a Uniform Civil Code under Article 44",
+        "legal_issues": [],
+        "statutes_referenced": [
+            "Constitution of India, Article 44",
+            "Indian Penal Code, 1860",
+            "Section 494"
+        ]
+    },
+    "1191043": {
+        "keywords": [
+            "rights",
+            "marriage",
+            "act",
+            "constitutional",
+            "fundamental",
+            "fundamental rights"
+        ],
+        "outcome": "The court upheld the constitutional validity of Section 9 of the Hindu Marriage Act providing for restitution of conjugal rights, rejecting the challenge that it violates fundamental rights",
+        "legal_issues": [
+            "Constitutional Law"
+        ],
+        "statutes_referenced": [
+            "Section 9"
+        ]
+    },
+    "1644868": {
+        "keywords": [
+            "arrest",
+            "ipc",
+            "dowry",
+            "harassment",
+            "act",
+            "crpc"
+        ],
+        "outcome": "The court directed that police must follow the checklist under Section 41(1)(b) CrPC before making any arrest",
+        "legal_issues": [
+            "Criminal Law"
+        ],
+        "statutes_referenced": [
+            "Indian Penal Code, 1860",
+            "Code of Criminal Procedure, 1973",
+            "Section 498A",
+            "Section 4",
+            "Section 41"
+        ]
+    },
+    "181517": {
+        "keywords": [
+            "judgment",
+            "article",
+            "constitution"
+        ],
+        "outcome": "The proclamation under Article 356 must be approved by Parliament",
+        "legal_issues": [],
+        "statutes_referenced": [
+            "Constitution of India, Article 356"
+        ]
+    },
+    "68518712": {
+        "keywords": [
+            "judgment"
+        ],
+        "outcome": "Supreme Court landmark judgment on reservation policy where the court upheld the 27% reservation for Other Backward Classes in government jobs",
+        "legal_issues": [],
+        "statutes_referenced": []
+    },
+    "116573": {
+        "keywords": [
+            "liability"
+        ],
+        "outcome": "Fletcher",
+        "legal_issues": [],
+        "statutes_referenced": []
+    },
+    "571079": {
+        "keywords": [
+            "industrial",
+            "pollution",
+            "compensation"
+        ],
+        "outcome": "The court applied the polluter pays principle and directed closure of polluting industries and payment of compensation to affected villagers",
+        "legal_issues": [],
+        "statutes_referenced": []
+    },
+    "1743946": {
+        "keywords": [
+            "information",
+            "technology",
+            "act",
+            "fundamental",
+            "right",
+            "free",
+            "speech",
+            "article",
+            "free speech"
+        ],
+        "outcome": "Supreme Court struck down Section 66A of the Information Technology Act, 2000 as unconstitutional, holding that it violated the fundamental right to free speech under Article 19(1)(a)",
+        "legal_issues": [
+            "Constitutional Law"
+        ],
+        "statutes_referenced": [
+            "Constitution of India, Article 19(1)(a)",
+            "the Information Technology Act, 2000",
+            "Section 66A"
+        ]
+    },
+    "1953529": {
+        "keywords": [
+            "custody",
+            "act"
+        ],
+        "outcome": "The court struck down Section 8(4) of the Representation of the People Act as unconstitutional",
+        "legal_issues": [
+            "Constitutional Law",
+            "Child custody"
+        ],
+        "statutes_referenced": [
+            "Section 8"
+        ]
+    },
+    "1363234": {
+        "keywords": [
+            "constitutional",
+            "criminal",
+            "right",
+            "article",
+            "free",
+            "speech",
+            "free speech"
+        ],
+        "outcome": "Supreme Court upheld the constitutional validity of the criminal defamation provisions under Sections 499 and 500 of the Indian Penal Code",
+        "legal_issues": [
+            "Constitutional Law"
+        ],
+        "statutes_referenced": [
+            "Constitution of India, Article 21",
+            "Constitution of India, Article 19(2)",
+            "Indian Penal Code, 1860",
+            "Section 499",
+            "Section 500"
+        ]
+    },
+    "1714044": {
+        "keywords": [
+            "fir",
+            "crpc",
+            "information"
+        ],
+        "outcome": "The court laid down guidelines for when preliminary inquiry may be conducted before registering FIR",
+        "legal_issues": [
+            "Criminal Law"
+        ],
+        "statutes_referenced": [
+            "Code of Criminal Procedure, 1973",
+            "Section 154"
+        ]
+    },
+    "776223": {
+        "keywords": [
+            "bank",
+            "act",
+            "child",
+            "guardianship",
+            "gender",
+            "equality"
+        ],
+        "outcome": "The court interpreted Section 6(a) of the Hindu Minority and Guardianship Act in light of gender equality under Articles 14 and 15",
+        "legal_issues": [
+            "Family Law"
+        ],
+        "statutes_referenced": [
+            "Constitution of India, Article 14",
+            "Constitution of India, Article 15",
+            "Guardians and Wards Act, 1890",
+            "Section 6"
+        ]
+    },
+    "944825": {
+        "keywords": [
+            "judgment",
+            "maintenance",
+            "rights",
+            "women",
+            "crpc"
+        ],
+        "outcome": "The court held that a Muslim husband is liable to pay maintenance to his divorced wife beyond the iddat period if she is unable to maintain herself",
+        "legal_issues": [
+            "Family Law",
+            "Matrimonial dispute"
+        ],
+        "statutes_referenced": [
+            "Code of Criminal Procedure, 1973",
+            "Hindu Marriage Act, 1955",
+            "Section 125"
+        ]
+    },
+    "1380344": {
+        "keywords": [
+            "act",
+            "complaint",
+            "bank"
+        ],
+        "outcome": "The court held that the complaint must be filed at the place where the cheque is dishonored by the drawee bank",
+        "legal_issues": [],
+        "statutes_referenced": [
+            "Section 138"
+        ]
+    },
+    "193456789": {
+        "keywords": [
+            "act"
+        ],
+        "outcome": "The court emphasized party autonomy in selection of arbitrator and held that unilateral appointment by one party is invalid",
+        "legal_issues": [],
+        "statutes_referenced": [
+            "the Arbitration and Conciliation Act, 1996"
+        ]
+    },
+    "820411": {
+        "keywords": [
+            "violence",
+            "arrest",
+            "detention"
+        ],
+        "outcome": "The court held that custodial death is one of the worst crimes in a civilized society and directed that every police station must prominently display the guidelines for arrest and detention",
+        "legal_issues": [],
+        "statutes_referenced": []
+    },
+    "1628989": {
+        "keywords": [
+            "gender",
+            "fundamental",
+            "rights",
+            "constitution",
+            "fundamental rights"
+        ],
+        "outcome": "The court directed the government to treat them as socially and educationally backward classes",
+        "legal_issues": [
+            "Constitutional Law"
+        ],
+        "statutes_referenced": [
+            "Constitution of India, Article 14",
+            "Constitution of India, Article 15",
+            "Constitution of India, Article 16",
+            "Constitution of India, Article 19",
+            "Constitution of India, Article 21"
+        ]
+    },
+    "1535592": {
+        "keywords": [
+            "crpc",
+            "women",
+            "maintenance"
+        ],
+        "outcome": "The court held that a divorced Muslim woman is entitled to maintenance from her former husband until she remarries, establishing that personal law cannot override statutory provisions",
+        "legal_issues": [
+            "Family Law",
+            "Matrimonial dispute"
+        ],
+        "statutes_referenced": [
+            "Code of Criminal Procedure, 1973",
+            "Hindu Marriage Act, 1955",
+            "Section 125"
+        ]
+    },
+    "140746": {
+        "keywords": [
+            "municipal",
+            "right",
+            "article",
+            "economic",
+            "constitutional",
+            "protection",
+            "right to life",
+            "due process"
+        ],
+        "outcome": "The court established that economic necessity that compels pavement dwelling deserves constitutional protection",
+        "legal_issues": [
+            "Constitutional Law",
+            "Right to life and personal liberty"
+        ],
+        "statutes_referenced": [
+            "Constitution of India, Article 21"
+        ]
+    },
+    "1328381": {
+        "keywords": [
+            "welfare",
+            "pollution",
+            "compensation"
+        ],
+        "outcome": "The court directed closure of tanneries causing pollution and ordered them to pay compensation for environmental restoration",
+        "legal_issues": [
+            "Environmental Law"
+        ],
+        "statutes_referenced": [
+            "Environment Protection Act, 1986"
+        ]
+    },
+    "145637": {
+        "keywords": [
+            "right",
+            "speedy",
+            "trial",
+            "fundamental",
+            "article",
+            "sentence",
+            "speedy trial"
+        ],
+        "outcome": "The court found that thousands of undertrial prisoners in Bihar were languishing in jails for periods longer than the maximum sentence for their alleged offences and ordered their immediate release",
+        "legal_issues": [],
+        "statutes_referenced": [
+            "Constitution of India, Article 21"
+        ]
+    },
+    "1679850": {
+        "keywords": [
+            "constitution",
+            "protection",
+            "article"
+        ],
+        "outcome": "The court held that triple talaq is not an essential religious practice entitled to protection under Article 25",
+        "legal_issues": [
+            "Constitutional Law"
+        ],
+        "statutes_referenced": [
+            "Constitution of India, Article 14",
+            "Constitution of India, Article 15",
+            "Constitution of India, Article 21",
+            "Constitution of India, Article 25"
+        ]
+    },
+    "92590": {
+        "keywords": [
+            "constitutional",
+            "public",
+            "employment",
+            "article",
+            "equality"
+        ],
+        "outcome": "Supreme Court upheld the constitutional validity of providing preferential treatment to Scheduled Castes and Scheduled Tribes in public employment",
+        "legal_issues": [
+            "Constitutional Law"
+        ],
+        "statutes_referenced": [
+            "Constitution of India, Article 16(4)",
+            "Constitution of India, Article 16(1)"
+        ]
+    },
+    "1076050": {
+        "keywords": [
+            "judgment",
+            "labour",
+            "right",
+            "article",
+            "public",
+            "interest",
+            "public interest"
+        ],
+        "outcome": "The court directed the government to identify, release, and rehabilitate bonded labourers",
+        "legal_issues": [
+            "Property Law"
+        ],
+        "statutes_referenced": [
+            "Constitution of India, Article 21"
+        ]
+    },
+    "189999080": {
+        "keywords": [
+            "constitutional",
+            "speech",
+            "violence",
+            "public"
+        ],
+        "outcome": "Supreme Court upheld the constitutional validity of the sedition law under Section 124A of the Indian Penal Code but limited its application",
+        "legal_issues": [
+            "Constitutional Law"
+        ],
+        "statutes_referenced": [
+            "Indian Penal Code, 1860",
+            "Section 124A"
         ]
     }
 }

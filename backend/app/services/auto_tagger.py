@@ -29,9 +29,9 @@ _SECTION_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Matches: "XXXXX Act, YYYY" or "XXXXX Act YYYY"
+# Matches: "XXXXX Act, YYYY" or "XXXXX Act YYYY" — limited to reasonable length
 _ACT_RE = re.compile(
-    r"((?:[A-Z][a-zA-Z\s&()]+?)(?:Act|Code|Rules|Procedure|Regulation)\s*,?\s*\d{4})",
+    r"\b((?:(?:the|of|for)\s+)?[A-Z][a-zA-Z\s&()]{3,55}?(?:Act|Code|Rules|Procedure|Regulation)\s*,?\s*\d{4})",
 )
 
 # Known statute shorthands that the regex might miss
@@ -453,7 +453,10 @@ def _extract_statutes(text: str) -> list[str]:
         individual = re.split(r"\s*,\s*|\s+and\s+", articles_str)
         for art in individual:
             art = art.strip()
-            if art:
+            # Clean up: remove leading "and " that slips through
+            if art.lower().startswith("and "):
+                art = art[4:].strip()
+            if art and art[0].isdigit():
                 ref = f"Constitution of India, Article {art}"
                 if ref not in seen:
                     statutes.append(ref)
