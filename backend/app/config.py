@@ -8,7 +8,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 CASES_FILE = DATA_DIR / "cases.json"
-KANOON_CASES_FILE = DATA_DIR / "kanoon_cases.json"
+KANOON_CASES_FILE = DATA_DIR / "kanoon_cases.json"    # Combined (legacy)
+KANOON_RAW_FILE = DATA_DIR / "kanoon_raw.json"         # Pure API data
+VIDHIMUR_TAGS_FILE = DATA_DIR / "vidhimur_tags.json"   # Our enrichment tags
 
 # ---------------------------------------------------------------------------
 # Court weights used by the ranking engine
