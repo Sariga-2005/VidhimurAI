@@ -2,7 +2,7 @@
 
 ## Demo
 
-▶️ **[Watch the Full Demo on YouTube](https://youtube.com/YOUR_VIDEO_LINK_HERE)**
+▶️ **[Watch the Full Demo on YouTube](https://youtu.be/BymlU63Gw1I)**
 
 ## Screenshots
 
