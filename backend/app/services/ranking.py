@@ -109,10 +109,10 @@ def _recency_boost(year: int) -> float:
 
 
 def _relevance_score(case: CaseRecord, query_tokens: list[str]) -> float:
-    """Keyword overlap score.
+    """Keyword overlap score with term frequency dampening.
 
     Checks keywords, legal_issues, case_name, and summary for matches.
-    Handles both single tokens and multi-word phrases (e.g. "sexual harassment").
+    Handles both single tokens and multi-word phrases.
     """
     if not query_tokens:
         return 0.0
@@ -126,18 +126,25 @@ def _relevance_score(case: CaseRecord, query_tokens: list[str]) -> float:
         " ".join(s.lower() for s in case.statutes_referenced),
     ])
 
-    # Count matches — weighted!
-    # Phrases (e.g. "sexual harassment") get 3x weight vs single words
+    # Count matches — weighted and dampened!
+    # Phrases (e.g. "sexual harassment") get 3x weight
     score_points = 0.0
     for token in query_tokens:
         if token in case_text:
+            # Dampening logic: Common words contribute significantly less
+            weight = 1.0
+            if token in ("job", "work", "order", "case", "court", "law", "like"):
+                weight = 0.1  # 90% reduction for hyper-common generic terms
+            
+            # Specificity boost: Rare/technical legal terms get higher weight
+            if token in ("terminated", "dismissal", "eviction", "deposit", "recovery", "negligence"):
+                weight = 2.0  # Double weight for high-signal legal keywords
+
             if " " in token:
-                score_points += 3.0  # Big boost for specific legal phrases
+                score_points += weight * 3.0
             else:
-                score_points += 1.0
+                score_points += weight
 
-    # Denominator is still just len(tokens) to allow score > 100 for great matches
+    # Denominator is len(tokens)
     ratio = score_points / len(query_tokens)
-
-    # Scale 0-1 ratio to 0-100 score (can exceed 100 now, which is good)
     return round(ratio * 100, 2)

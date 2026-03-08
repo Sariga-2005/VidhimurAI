@@ -8,6 +8,15 @@ outcome) — no LLM required.
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+# Add project root to sys.path to allow 'app.config' imports
+# This handles cases where the script is run directly or from subdirectories
+_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
 import re
 from dataclasses import dataclass, field
 

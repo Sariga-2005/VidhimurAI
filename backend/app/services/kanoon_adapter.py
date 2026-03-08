@@ -22,6 +22,7 @@ from pydantic import BaseModel, Field
 
 from app.config import KANOON_RAW_FILE, VIDHIMUR_TAGS_FILE
 from app.models.schemas import CaseRecord
+from app.services.auto_tagger import generate_tags
 
 logger = logging.getLogger(__name__)
 
@@ -150,6 +151,32 @@ def get_all_cases() -> list[CaseRecord]:
     try:
         raw_docs = _load_raw_docs()
         tags_map = _load_tags()
+
+        # Dynamic enrichment: Tag any cases missing from vidhimur_tags.json
+        needs_save = False
+        for doc in raw_docs:
+            tid_str = str(doc.tid)
+            if tid_str not in tags_map:
+                logger.info(f"Dynamically tagging missing case: {tid_str}")
+                cite_titles = [c.title for c in doc.citeList]
+                new_tags = generate_tags(
+                    title=doc.title,
+                    headline=doc.headline or "",
+                    docsource=doc.docsource,
+                    cite_titles=cite_titles
+                )
+                tags_map[tid_str] = VidhimurTags(**new_tags.to_dict())
+                needs_save = True
+
+        if needs_save:
+            try:
+                # Update the tags file on disk
+                serializable_tags = {tid: t.dict() for tid, t in tags_map.items()}
+                with open(VIDHIMUR_TAGS_FILE, "w", encoding="utf-8") as f:
+                    json.dump(serializable_tags, f, indent=4, ensure_ascii=False)
+                logger.info(f"Updated {VIDHIMUR_TAGS_FILE} with new dynamic tags.")
+            except Exception as e:
+                logger.error(f"Failed to save dynamic tags: {e}")
 
         results = [
             _merge(doc, tags_map.get(str(doc.tid)))

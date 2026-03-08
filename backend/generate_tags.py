@@ -80,7 +80,7 @@ def compare_tags(auto_tags: dict, hand_tags: dict, cases: list[dict]) -> None:
 
         if not hand:
             print(f"\n[{tid}] {title}")
-            print(f"  ⚠ No hand-written tags — auto-generated only")
+            print(f"  [WAIT] No hand-written tags — auto-generated only")
             continue
 
         print(f"\n{'='*70}")
@@ -122,7 +122,10 @@ def write_tags(all_tags: dict) -> None:
     """Write tags to vidhimur_tags.json."""
     with open(VIDHIMUR_TAGS_FILE, "w", encoding="utf-8") as f:
         json.dump(all_tags, f, indent=4, ensure_ascii=False)
-    print(f"\n✅ Written {len(all_tags)} entries to {VIDHIMUR_TAGS_FILE}")
+    try:
+        print(f"\n[DONE] Written {len(all_tags)} entries to {VIDHIMUR_TAGS_FILE}")
+    except UnicodeEncodeError:
+        print(f"\nTag generation complete. File written to {VIDHIMUR_TAGS_FILE}")
 
 
 if __name__ == "__main__":
@@ -133,8 +136,15 @@ if __name__ == "__main__":
         hand_tags = load_existing_tags()
         compare_tags(auto_tags, hand_tags, cases)
     elif "--write" in sys.argv:
-        print_tags(auto_tags, cases)
         write_tags(auto_tags)
+        try:
+            print_tags(auto_tags, cases)
+        except UnicodeEncodeError:
+            print("\n[INFO] Done. Could not print all tags due to terminal encoding limitations.")
+            print("  The file has been successfully written to vidhimur_tags.json.")
     else:
-        print_tags(auto_tags, cases)
-        print(f"\n💡 Run with --write to save, or --compare to diff against hand-written tags.")
+        try:
+            print_tags(auto_tags, cases)
+        except UnicodeEncodeError:
+            print("\n[INFO] Terminal encoding mismatch. Tags generated but could not be fully displayed.")
+        print(f"\nRun with --write to save, or --compare to diff against hand-written tags.")

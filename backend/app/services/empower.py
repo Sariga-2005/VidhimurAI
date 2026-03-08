@@ -128,27 +128,32 @@ def _collect_relevant_sections(cases: list[CaseRecord]) -> list[str]:
 # ---------------------------------------------------------------------------
 
 def _compute_legal_strength(precedents: list[CaseResult]) -> str:
-    """Heuristic based on quantity and court levels of precedents.
-
-    Conservative — only returns 'Strong' if facts clearly support it.
+    """Systematic heuristic based on match quality (relevance) and court levels.
+    
+    A case is only 'Strong' if it has high-authority precedents AND those precedents
+    are highly relevant to the search query.
     """
     if not precedents:
         return "Weak"
 
-    supreme_count = sum(
-        1 for p in precedents
-        if get_authority_tier(p.court) == 1
-    )
-    high_count = sum(
-        1 for p in precedents
-        if get_authority_tier(p.court) == 2
-    )
-    total = len(precedents)
+    # 1. Signal Quality: Calculate average relevance of the top results
+    # This prevents high-authority but irrelevant results from inflating strength.
+    avg_relevance = sum(p.relevance_score for p in precedents) / len(precedents)
+    
+    # 2. Authority Counts
+    supreme_count = sum(1 for p in precedents if get_authority_tier(p.court) == 1)
+    high_count = sum(1 for p in precedents if get_authority_tier(p.court) == 2)
 
-    if supreme_count >= 2 or (supreme_count >= 1 and high_count >= 2):
+    # 3. Systematic Grading
+    # Strong: High relevance (>50) AND at least one top-tier authority
+    if avg_relevance > 50 and (supreme_count >= 1 or high_count >= 2):
         return "Strong"
-    if total >= 3 or supreme_count >= 1 or high_count >= 2:
+    
+    # Moderate: Decent relevance (>25)
+    if avg_relevance > 25:
         return "Moderate"
+    
+    # Weak: Generic matches or low relevance
     return "Weak"
 
 
@@ -214,10 +219,19 @@ def analyze_empowerment(query: str, context: str | None = None) -> EmpowerRespon
     # Layer 6: Relevant sections (blacklist-filtered)
     relevant_sections = _collect_relevant_sections(top_records)
 
-    # Layer 7: Legal strength
+    # Layer 7: Legal strength (Systematic Relevance-Weighted)
     legal_strength = _compute_legal_strength(top_precedents)
 
-    # Layer 8: Action roadmap (deterministic template)
+    # Layer 8: Confidence Gating / Intent Detection
+    # If match quality is poor, treat as a "General Inquiry" to avoid wrong roadmaps.
+    avg_top_relevance = sum(p.relevance_score for p in top_precedents) / len(top_precedents) if top_precedents else 0
+    
+    if avg_top_relevance < 20:
+        # Override to general category for extremely vague queries
+        issue_type = "General Legal Issue"
+        legal_strength = "Weak"
+
+    # Layer 9: Action roadmap (deterministic template)
     roadmap_entries = ACTION_ROADMAPS.get(issue_type, DEFAULT_ROADMAP)
     action_steps = [
         f"Step {e['step']}: {e['title']} \u2014 {e['description']}"

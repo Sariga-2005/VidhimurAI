@@ -63,6 +63,7 @@ STOPWORDS: set[str] = {
     "here", "there", "now", "already", "still",
     "refuses", "refused", "want", "wants", "need", "needs",
     "please", "help", "get", "got", "getting",
+    "job", "boss", "office", "work", "like", "tired",
 }
 
 # ---------------------------------------------------------------------------
@@ -102,6 +103,9 @@ LEGAL_SYNONYMS: dict[str, list[str]] = {
     "boss": ["employer", "workplace", "superior"],
     "bullying": ["harassment", "workplace", "intimidation"],
     "molest": ["sexual harassment", "assault", "criminal"],
+    "quit": ["resignation", "forced resignation", "constructive dismissal", "termination"],
+    "forced": ["coerced", "involuntary", "forced resignation", "intimidation"],
+    "salary": ["wages", "remuneration", "compensation"],
 }
 
 # ---------------------------------------------------------------------------
@@ -240,6 +244,8 @@ ISSUE_KEYWORDS: dict[str, list[str]] = {
         "workplace", "dismissal", "employer", "harassment", "harrassment",
         "sexual harassment", "office", "bullying", "posh", "vishaka",
         "hostile work", "boss", "superior", "molest",
+        "resignation", "forced resignation", "constructive dismissal",
+        "quit", "fired", "employee", "service law", "wrongful termination",
     ],
     "Cyber Law": [
         "cyber", "data", "privacy", "online", "internet", "hacking",
