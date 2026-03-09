@@ -14,29 +14,25 @@ KANOON_RAW_FILE = DATA_DIR / "kanoon_raw.json"         # Pure API data
 VIDHIMUR_TAGS_FILE = DATA_DIR / "vidhimur_tags.json"   # Our enrichment tags
 
 # ---------------------------------------------------------------------------
-# Court weights used by the ranking engine (pattern-based)
+# Centralized Court Hierarchy Configuration
 # ---------------------------------------------------------------------------
-def get_court_weight(court: str) -> int:
-    """Map ANY court name to a weight using pattern matching.
+COURT_TIERS = [
+    {"patterns": ["supreme court"], "weight": 10, "tier": 1},
+    {"patterns": ["high court"], "weight": 7, "tier": 2},
+    {"patterns": ["tribunal", "commission", "appellate", "ngt", "ncdrc"], "weight": 5, "tier": 3},
+    {"patterns": ["district", "sessions", "magistrate", "consumer forum", "family court"], "weight": 4, "tier": 4},
+]
 
-    Tier     | Weight | Pattern
-    ---------|--------|--------------------------------------------
-    Supreme  |   10   | Contains 'supreme court'
-    High     |    7   | Contains 'high court'
-    Tribunal |    5   | Contains 'tribunal' or 'commission' or 'ngt'
-    District |    4   | Contains 'district' or 'sessions'
-    Other    |    3   | Anything unrecognized
-    """
+def _get_court_info(court: str) -> dict:
     name = court.lower()
-    if "supreme court" in name:
-        return 10
-    if "high court" in name:
-        return 7
-    if any(kw in name for kw in ("tribunal", "commission", "appellate", "ngt", "ncdrc")):
-        return 5
-    if any(kw in name for kw in ("district", "sessions", "magistrate", "consumer forum", "family court")):
-        return 4
-    return 3  # Default for unknown courts
+    for info in COURT_TIERS:
+        if any(kw in name for kw in info["patterns"]):
+            return info
+    return {"weight": 3, "tier": 4}
+
+def get_court_weight(court: str) -> int:
+    """Map ANY court name to a weight using pattern matching."""
+    return _get_court_info(court)["weight"]
 
 # ---------------------------------------------------------------------------
 # Recency boost parameters
@@ -112,21 +108,8 @@ LEGAL_SYNONYMS: dict[str, list[str]] = {
 # Layer 2 — Authority Filter: Court tiers (pattern-based)
 # ---------------------------------------------------------------------------
 def get_authority_tier(court: str) -> int:
-    """Map ANY court name to an authority tier using pattern matching.
-
-    Tier 1: Supreme Court (highest authority)
-    Tier 2: High Courts
-    Tier 3: Tribunals / Commissions / Appellate bodies
-    Tier 4: District / Sessions / Magistrate courts (lowest)
-    """
-    name = court.lower()
-    if "supreme court" in name:
-        return 1
-    if "high court" in name:
-        return 2
-    if any(kw in name for kw in ("tribunal", "commission", "appellate", "ngt", "ncdrc")):
-        return 3
-    return 4  # District, sessions, magistrate, or unknown
+    """Map ANY court name to an authority tier using pattern matching."""
+    return _get_court_info(court)["tier"]
 
 # Minimum number of higher-tier results before we exclude lower tiers
 AUTHORITY_MIN_HIGH_TIER = 5

@@ -171,7 +171,9 @@ def analyze_empowerment(query: str, context: str | None = None) -> EmpowerRespon
     normalized = normalize_query(query)
 
     # Check cache
-    cache_key = f"empower:{normalized.search_string}"
+    import hashlib
+    context_hash = hashlib.md5(context.encode("utf-8")).hexdigest()[:8] if context else "no_ctx"
+    cache_key = f"empower:{normalized.search_string}:{context_hash}"
     cached = cache.get_query(cache_key)
     if cached:
         return cached

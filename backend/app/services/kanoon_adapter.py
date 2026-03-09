@@ -15,10 +15,13 @@ from __future__ import annotations
 
 import json
 import logging
+import threading
 from functools import lru_cache
 from pathlib import Path
 
 from pydantic import BaseModel, Field
+
+_tags_lock = threading.Lock()
 
 from app.config import KANOON_RAW_FILE, VIDHIMUR_TAGS_FILE
 from app.models.schemas import CaseRecord
@@ -170,10 +173,11 @@ def get_all_cases() -> list[CaseRecord]:
 
         if needs_save:
             try:
-                # Update the tags file on disk
+                # Update the tags file on disk (thread-safe)
                 serializable_tags = {tid: t.dict() for tid, t in tags_map.items()}
-                with open(VIDHIMUR_TAGS_FILE, "w", encoding="utf-8") as f:
-                    json.dump(serializable_tags, f, indent=4, ensure_ascii=False)
+                with _tags_lock:
+                    with open(VIDHIMUR_TAGS_FILE, "w", encoding="utf-8") as f:
+                        json.dump(serializable_tags, f, indent=4, ensure_ascii=False)
                 logger.info(f"Updated {VIDHIMUR_TAGS_FILE} with new dynamic tags.")
             except Exception as e:
                 logger.error(f"Failed to save dynamic tags: {e}")
