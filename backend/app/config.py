@@ -59,7 +59,9 @@ STOPWORDS: set[str] = {
     "here", "there", "now", "already", "still",
     "refuses", "refused", "want", "wants", "need", "needs",
     "please", "help", "get", "got", "getting",
-    "job", "boss", "office", "work", "like", "tired",
+    # NOTE: Do NOT add domain-signal words like "job", "boss", "office",
+    # "work", "like", "tired" here — they carry relevance signal and their
+    # absence in legal case text is itself a meaningful Weak-strength indicator.
 }
 
 # ---------------------------------------------------------------------------
@@ -77,9 +79,14 @@ LEGAL_SYNONYMS: dict[str, list[str]] = {
     "wages": ["salary", "remuneration"],
     "divorce": ["marriage", "matrimonial", "custody"],
     "custody": ["child", "guardianship", "divorce"],
-    "harassment": ["sexual harassment", "workplace", "stalking", "vishaka"],
-    "harrassment": ["sexual harassment", "workplace", "stalking", "vishaka"],
-    "office": ["workplace", "employer", "employment"],
+    # Harassment synonyms: keep generic harassment -> workplace terms,
+    # but add dedicated sexual harassment expansions.
+    # NOTE: 'stalking' alone is NOT used — it matches cyber/IT Act cases.
+    # Use 'stalking at work' for POSH context.
+    "harassment": ["workplace harassment", "vishaka"],
+    "harrassment": ["workplace harassment", "vishaka"],
+    "harassed": ["sexual harassment", "posh", "vishaka", "workplace harassment"],
+    "sexually": ["sexual harassment", "posh", "vishaka"],
     "hacking": ["cyber", "unauthorized access", "data theft"],
     "privacy": ["data protection", "surveillance", "personal data"],
     "pollution": ["environment", "emission", "waste", "polluted"],
@@ -97,11 +104,10 @@ LEGAL_SYNONYMS: dict[str, list[str]] = {
     "arrested": ["arrest", "bail", "custody"],
     "divorced": ["divorce", "marriage", "matrimonial"],
     "boss": ["employer", "workplace", "superior"],
-    "bullying": ["harassment", "workplace", "intimidation"],
+    "bullying": ["workplace harassment", "workplace", "intimidation"],
     "molest": ["sexual harassment", "assault", "criminal"],
     "quit": ["resignation", "forced resignation", "constructive dismissal", "termination"],
     "forced": ["coerced", "involuntary", "forced resignation", "intimidation"],
-    "salary": ["wages", "remuneration", "compensation"],
 }
 
 # ---------------------------------------------------------------------------
@@ -155,7 +161,8 @@ RELEVANCE_THRESHOLD = 10.0
 STATUTE_BLACKLIST_PATTERNS: list[str] = [
     "prevention of terrorism",
     "public safety act",
-    "sexual harassment",
+    # "sexual harassment" intentionally removed — POSH Act statutes are VALID
+    # and should appear in relevant_sections for harassment queries.
     "information technology act",
     "digital personal data",
     "indian penal code, section 120b",
@@ -176,20 +183,13 @@ STATUTE_BLACKLIST_PATTERNS: list[str] = [
 # Case exclusion keywords — cases whose summary contains these are excluded
 # ---------------------------------------------------------------------------
 CASE_EXCLUSION_KEYWORDS: list[str] = [
+    # Only exclude cases that are genuinely NOT citizen-actionable.
+    # TF-IDF handles false positives from long/noisy documents natively —
+    # do not add exclusions to compensate for scorer weaknesses.
     "terrorism",
     "habeas corpus",
     "preventive detention",
-    "public interest litigation",
     "constitutional amendment",
-    "data localization",
-    "sexual harassment",
-    "domestic violence",
-    "cyber crime",
-    "hacking",
-    "unauthorized access",
-    "trade secrets",
-    "micro-credit",
-    "self-help group",
 ]
 
 # ---------------------------------------------------------------------------
@@ -221,14 +221,24 @@ ISSUE_KEYWORDS: dict[str, list[str]] = {
         "unfair trade", "compensation", "defective", "goods",
         "consumer protection act",
     ],
+    # Sexual Harassment must appear BEFORE Labor Law so it scores higher
+    # and wins the domain classification for harassment queries.
+    # Includes conjugated phrases so natural queries ("being sexually harassed")
+    # are matched by _detect_domain via simple substring search.
+    "Sexual Harassment": [
+        "sexual harassment", "sexually harassed", "sexually harassing",
+        "being harassed", "being sexually", "being sexually harassed",
+        "posh", "vishaka", "internal complaints committee", "icc",
+        "hostile work environment", "unwanted advances", "molest", "molestation",
+        "inappropriate touch", "groping", "stalking at work",
+    ],
     "Labor Law": [
         "employment", "worker", "wages", "termination", "industrial",
         "labour", "labor", "retrenchment", "gratuity", "provident fund",
         "workplace", "dismissal", "employer", "harassment", "harrassment",
-        "sexual harassment", "office", "bullying", "posh", "vishaka",
-        "hostile work", "boss", "superior", "molest",
+        "bullying", "hostile work", "boss", "superior",
         "resignation", "forced resignation", "constructive dismissal",
-        "quit", "fired", "employee", "service law", "wrongful termination",
+        "fired", "employee", "service law", "wrongful termination",
     ],
     "Cyber Law": [
         "cyber", "data", "privacy", "online", "internet", "hacking",
@@ -299,6 +309,12 @@ ACTION_ROADMAPS: dict[str, list[dict[str, str]]] = {
         {"step": "2", "title": "File with Consumer Forum", "description": "Lodge a complaint with the District Consumer Disputes Redressal Forum."},
         {"step": "3", "title": "Attach Evidence", "description": "Include bills, receipts, warranties, and correspondence."},
         {"step": "4", "title": "Attend Hearings", "description": "Follow up on the complaint and attend scheduled hearings."},
+    ],
+    "Sexual Harassment": [
+        {"step": "1", "title": "Document All Incidents", "description": "Record dates, times, locations, witnesses, and details of each incident. Save all messages, emails, or notes."},
+        {"step": "2", "title": "File a Complaint with the ICC", "description": "Submit a written complaint to your employer's Internal Complaints Committee (ICC) within 3 months of the last incident, as required by the POSH Act, 2013."},
+        {"step": "3", "title": "Request Interim Relief", "description": "Ask the ICC for interim measures such as transfer or leave during the inquiry."},
+        {"step": "4", "title": "Escalate if Necessary", "description": "If no ICC exists or is unresponsive, file a complaint with the Local Complaints Committee (LCC) under the District Officer, or approach the police under IPC Section 354A."},
     ],
     "Labor Law": [
         {"step": "1", "title": "Document Workplace Issue", "description": "Keep records of employment terms, communications, and violations."},

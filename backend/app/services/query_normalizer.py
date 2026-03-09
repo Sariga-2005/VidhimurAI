@@ -84,8 +84,27 @@ def normalize_query(query: str) -> NormalizedQuery:
     # Step 4: Detect legal domain (deterministic first)
     domain = _detect_domain(query)
 
-    # Step 4b: LLM fallback — if keywords couldn't classify, ask the LLM
-    if domain == "General Legal Issue":
+    # Step 4b: LLM fallback — only for queries that contain some legal vocabulary
+    # or are detailed enough (≥4 tokens) to warrant classification.
+    # Vague complaints ("i dont like my job") should stay General Legal Issue —
+    # calling the LLM here causes it to hallucinate a legal domain and inject
+    # synonyms that inflate TF-IDF scores against unrelated cases.
+    _LEGAL_SIGNAL_WORDS = {
+        "harassment", "harassed", "fired", "evicted", "landlord", "tenant",
+        "deposit", "divorce", "custody", "arrest", "bail", "cheated", "scammed",
+        "terminated", "dismissed", "accident", "injured", "pollut", "fraud",
+        "stolen", "robbery", "assault", "murder", "rape", "molest", "hacking",
+        "privacy", "defective", "consumer", "pension", "gratuity", "wages",
+    }
+    query_lower_words = set(query.lower().split())
+    has_legal_signal = any(
+        sig in word
+        for word in query_lower_words
+        for sig in _LEGAL_SIGNAL_WORDS
+    )
+    enough_tokens = len(tokens) >= 4
+
+    if domain == "General Legal Issue" and (has_legal_signal or enough_tokens):
         try:
             from app.services.llm_query_enhancer import llm_classify_query
             llm_result = llm_classify_query(query)

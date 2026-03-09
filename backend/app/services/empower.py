@@ -1,34 +1,57 @@
 """
-Empowerment analysis service — production-grade pipeline.
+Empowerment analysis service — TF-IDF + Semantic Re-ranking pipeline.
 
 Pipeline:
     0. Query Normalization  (stopwords, synonyms, domain detection)
     1. Issue Classification (deterministic keyword matching + sub-classification)
-    2. Retrieval + Dual Scoring (empower mode)
+    2. TF-IDF Retrieval     (cosine similarity over enriched case corpus)
     3. Case Exclusion       (remove irrelevant cases by summary keywords)
-    4. Relevance Threshold  (discard cases below RELEVANCE_THRESHOLD)
+    4. Semantic Re-rank     (sentence-transformer re-orders top candidates)
     5. Relevant Sections    (statutes from top cases, blacklist-filtered)
-    6. Legal Strength       (heuristic from court levels)
+    6. Legal Strength       (heuristic from TF-IDF score + court levels)
     7. Action Roadmap       (deterministic template)
     8. Cache                (store results)
 """
 
 from __future__ import annotations
 
+import hashlib
+import logging
+
 from app.config import (
     ACTION_ROADMAPS,
     DEFAULT_ROADMAP,
     get_authority_tier,
     PROPERTY_SUBCATEGORIES,
-    RELEVANCE_THRESHOLD,
     STATUTE_BLACKLIST_PATTERNS,
     CASE_EXCLUSION_KEYWORDS,
 )
 from app.models.schemas import CaseRecord, CaseResult, EmpowerResponse
-from app.services.ranking import compute_score, tokenize_query
+from app.services.tfidf_index import build_index, get_index
+from app.services.semantic_reranker import build_reranker, get_reranker
 from app.services.query_normalizer import normalize_query
 from app.services.kanoon_adapter import get_all_cases
 from app.services.cache import cache
+
+logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Index lifecycle — built once at first use, rebuilt if new cases are loaded
+# ---------------------------------------------------------------------------
+
+_index_built = False
+
+
+def _ensure_index() -> None:
+    """Build TF-IDF index + semantic re-ranker if not yet done."""
+    global _index_built
+    if not _index_built:
+        all_cases = get_all_cases()
+        build_index(all_cases)
+        build_reranker(all_cases)   # loads from disk if already computed
+        _index_built = True
+        logger.info(f"Empower index + re-ranker ready for {len(all_cases)} cases.")
 
 
 # ---------------------------------------------------------------------------
@@ -50,12 +73,7 @@ def _classify_issue(query: str, detected_domain: str) -> str:
 
 
 def _refine_property_issue(query: str) -> str:
-    """Refine a Property Law classification to a precise sub-category.
-
-    Uses weighted scoring: multi-word phrase matches score 3 points,
-    single-word matches score 1. This ensures 'Security Deposit Recovery'
-    beats 'Tenancy Dispute' when the user mentions 'deposit'.
-    """
+    """Refine a Property Law classification to a precise sub-category."""
     q = query.lower()
     best_match = "Property Law"
     best_score = 0
@@ -77,31 +95,14 @@ def _refine_property_issue(query: str) -> str:
 def _exclude_irrelevant_cases(
     scored: list[tuple[CaseRecord, float, dict]],
 ) -> list[tuple[CaseRecord, float, dict]]:
-    """Remove cases whose summary contains exclusion keywords (terrorism, habeas corpus, etc.)."""
+    """Remove cases whose summary contains exclusion keywords."""
     filtered = []
     for case, score, bd in scored:
-        summary_lower = case.summary.lower()
-        case_name_lower = case.case_name.lower()
-        blob = summary_lower + " " + case_name_lower
+        blob = case.summary.lower() + " " + case.case_name.lower()
         excluded = any(kw in blob for kw in CASE_EXCLUSION_KEYWORDS)
         if not excluded:
             filtered.append((case, score, bd))
     return filtered
-
-
-# ---------------------------------------------------------------------------
-# Relevance threshold filter
-# ---------------------------------------------------------------------------
-
-def _apply_relevance_threshold(
-    scored: list[tuple[CaseRecord, float, dict]],
-) -> list[tuple[CaseRecord, float, dict]]:
-    """Discard cases with relevance_score below RELEVANCE_THRESHOLD."""
-    return [
-        (case, score, bd)
-        for case, score, bd in scored
-        if bd.get("relevance_score", 0.0) >= RELEVANCE_THRESHOLD
-    ]
 
 
 # ---------------------------------------------------------------------------
@@ -124,36 +125,31 @@ def _collect_relevant_sections(cases: list[CaseRecord]) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
-# Legal strength determination
+# Legal strength determination (TF-IDF scale: scores in [0, 1])
 # ---------------------------------------------------------------------------
 
 def _compute_legal_strength(precedents: list[CaseResult]) -> str:
-    """Systematic heuristic based on match quality (relevance) and court levels.
-    
-    A case is only 'Strong' if it has high-authority precedents AND those precedents
-    are highly relevant to the search query.
+    """
+    Heuristic based on TF-IDF relevance (0–1 scale) and court authority.
+
+    Thresholds are tuned for cosine similarity output:
+      Strong   : avg_tfidf > 0.15 AND ≥1 Supreme Court OR ≥2 High Court cases
+      Moderate : avg_tfidf > 0.04
+      Weak     : everything else
     """
     if not precedents:
         return "Weak"
 
-    # 1. Signal Quality: Calculate average relevance of the top results
-    # This prevents high-authority but irrelevant results from inflating strength.
-    avg_relevance = sum(p.relevance_score for p in precedents) / len(precedents)
-    
-    # 2. Authority Counts
-    supreme_count = sum(1 for p in precedents if get_authority_tier(p.court) == 1)
-    high_count = sum(1 for p in precedents if get_authority_tier(p.court) == 2)
+    # relevance_score is stored ×100 for UI compat, so divide back
+    avg_tfidf = sum(p.relevance_score / 100.0 for p in precedents) / len(precedents)
 
-    # 3. Systematic Grading
-    # Strong: High relevance (>50) AND at least one top-tier authority
-    if avg_relevance > 50 and (supreme_count >= 1 or high_count >= 2):
+    supreme_count = sum(1 for p in precedents if get_authority_tier(p.court) == 1)
+    high_count    = sum(1 for p in precedents if get_authority_tier(p.court) == 2)
+
+    if avg_tfidf > 0.15 and (supreme_count >= 1 or high_count >= 2):
         return "Strong"
-    
-    # Moderate: Decent relevance (>25)
-    if avg_relevance > 25:
+    if avg_tfidf > 0.04:
         return "Moderate"
-    
-    # Weak: Generic matches or low relevance
     return "Weak"
 
 
@@ -164,76 +160,89 @@ def _compute_legal_strength(precedents: list[CaseResult]) -> str:
 def analyze_empowerment(query: str, context: str | None = None) -> EmpowerResponse:
     """
     Full empowerment pipeline:
-        normalize → classify → retrieve → filter → rank → assess → roadmap
+        normalize → classify → TF-IDF retrieve → exclude → authority re-rank → assess → roadmap
     """
 
     # Layer 0: Normalize query
     normalized = normalize_query(query)
 
     # Check cache
-    import hashlib
     context_hash = hashlib.md5(context.encode("utf-8")).hexdigest()[:8] if context else "no_ctx"
-    cache_key = f"empower:{normalized.search_string}:{context_hash}"
+    cache_key = f"empower_tfidf:{normalized.search_string}:{context_hash}"
     cached = cache.get_query(cache_key)
     if cached:
         return cached
 
-    # Layer 1: Classify issue (using normalizer's domain detection + sub-classification)
+    # Layer 1: Classify issue
     issue_type = _classify_issue(query, normalized.detected_domain)
 
-    # Layer 2: Combine query + optional context for relevance matching
-    full_query = f"{query} {context}" if context else query
-    full_normalized = normalize_query(full_query) if context else normalized
-    tokens = full_normalized.expanded_terms or tokenize_query(full_query)
+    # Layer 2: Build full search string (query + context + expanded terms)
+    full_query_parts = [query]
+    if context:
+        full_query_parts.append(context)
+    # Append expanded terms from the normalizer (synonyms etc.) to the search string
+    full_query_parts.extend(normalized.expanded_terms)
+    search_string = " ".join(full_query_parts)
 
-    # Layer 3: Retrieve + dual scoring (empower mode, no authority pre-filter)
-    all_cases = get_all_cases()
-    scored: list[tuple[CaseRecord, float, dict]] = []
-    for case in all_cases:
-        score, breakdown = compute_score(case, tokens, mode="empower")
-        scored.append((case, score, breakdown))
+    # Layer 3: TF-IDF retrieval
+    _ensure_index()
+    index = get_index()
+    scored = index.search(search_string, top_n=50, min_score=0.01)
 
-    scored.sort(key=lambda x: x[1], reverse=True)
-
-    # Layer 4: Case Exclusion — remove terrorism, habeas corpus, PIL, etc.
+    # Layer 4: Case exclusion (terrorism, habeas corpus, etc.)
     scored = _exclude_irrelevant_cases(scored)
 
-    # Layer 5: Relevance Threshold — discard low-relevance cases
-    scored = _apply_relevance_threshold(scored)
+    # Layer 4a: Semantic re-rank — refine ordering with sentence embeddings.
+    # Re-ranker uses 70% semantic similarity + 30% TF-IDF on top 20 candidates.
+    # Falls back to TF-IDF order gracefully if model unavailable.
+    reranker = get_reranker()
+    scored = reranker.rerank(query, scored, top_n=20)
 
-    # Keep top-5 as precedents (may be fewer if filtering removed cases)
+    # Keep top-5 as precedents — only cases with a real TF-IDF match
     top_precedents: list[CaseResult] = []
     top_records: list[CaseRecord] = []
     for case, score, bd in scored[:5]:
+        # Skip zero-score cases — they dilute strength calculation
+        if bd.get("tfidf_score", 0.0) < 0.01:
+            continue
         top_precedents.append(CaseResult(
             kanoon_tid=case.kanoon_tid,
             case_name=case.case_name,
             court=case.court,
             year=case.year,
             citation_count=case.citation_count,
-            strength_score=score,
+            strength_score=round(score, 4),
             authority_score=bd.get("authority_score", 0.0),
             relevance_score=bd.get("relevance_score", 0.0),
             summary=case.summary,
         ))
         top_records.append(case)
+        if len(top_precedents) == 5:
+            break
 
-    # Layer 6: Relevant sections (blacklist-filtered)
+    # Layer 5: Relevant sections
     relevant_sections = _collect_relevant_sections(top_records)
 
-    # Layer 7: Legal strength (Systematic Relevance-Weighted)
+    # Layer 6: Legal strength
     legal_strength = _compute_legal_strength(top_precedents)
 
-    # Layer 8: Confidence Gating / Intent Detection
-    # If match quality is poor, treat as a "General Inquiry" to avoid wrong roadmaps.
-    avg_top_relevance = sum(p.relevance_score for p in top_precedents) / len(top_precedents) if top_precedents else 0
-    
-    if avg_top_relevance < 20:
-        # Override to general category for extremely vague queries
-        issue_type = "General Legal Issue"
+    # Layer 7: Confidence gating
+    # (a) If TF-IDF found nothing meaningful, revert to General inquiry
+    avg_tfidf = (
+        sum(p.relevance_score / 100.0 for p in top_precedents) / len(top_precedents)
+        if top_precedents else 0.0
+    )
+    if avg_tfidf < 0.02:
+        issue_type    = "General Legal Issue"
         legal_strength = "Weak"
 
-    # Layer 9: Action roadmap (deterministic template)
+    # (b) General Legal Issue should never be Moderate/Strong —
+    #     if we classified as General (vague query, no legal vocabulary),
+    #     cap strength at Weak regardless of incidental TF-IDF matches.
+    if issue_type == "General Legal Issue":
+        legal_strength = "Weak"
+
+    # Layer 8: Action roadmap
     roadmap_entries = ACTION_ROADMAPS.get(issue_type, DEFAULT_ROADMAP)
     action_steps = [
         f"Step {e['step']}: {e['title']} \u2014 {e['description']}"
@@ -248,7 +257,5 @@ def analyze_empowerment(query: str, context: str | None = None) -> EmpowerRespon
         action_steps=action_steps,
     )
 
-    # Cache the result
     cache.set_query(cache_key, response)
-
     return response

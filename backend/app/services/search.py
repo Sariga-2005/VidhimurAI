@@ -1,61 +1,86 @@
 """
-Search service — production-grade pipeline.
+Search service — TF-IDF + Semantic Re-ranking pipeline.
 
 Pipeline:
     0. Query Normalization  (stopwords, synonyms, domain detection)
-    1. Retrieval            (load all cases from adapter)
-    2. Authority Filter     (prioritize SC > HC > DC)
+    1. TF-IDF Retrieval     (cosine similarity over enriched case corpus)
+    2. Authority Filter     (research mode: prefer SC > HC)
     3. User Filters         (court, year range)
-    4. Deterministic Ranking (dual scoring: authority + relevance)
+    4. Semantic Re-rank     (sentence-transformer re-orders top candidates)
     5. Cache                (store results for repeat queries)
     6. Output Builder       (structured response)
 """
 
 from __future__ import annotations
 
-from app.config import get_authority_tier, AUTHORITY_MIN_HIGH_TIER, RELEVANCE_THRESHOLD
+import hashlib
+import logging
+
+from app.config import get_authority_tier, AUTHORITY_MIN_HIGH_TIER
 from app.models.schemas import CaseRecord, CaseResult, SearchFilters, SearchResponse
-from app.services.ranking import compute_score, tokenize_query
+from app.services.tfidf_index import build_index, get_index
+from app.services.semantic_reranker import build_reranker, get_reranker
 from app.services.query_normalizer import normalize_query
 from app.services.kanoon_adapter import get_all_cases
 from app.services.cache import cache
 
+logger = logging.getLogger(__name__)
+
+_index_built = False
+
+
+def _ensure_index() -> None:
+    global _index_built
+    if not _index_built:
+        cases = get_all_cases()
+        build_index(cases)
+        build_reranker(cases)
+        _index_built = True
+        logger.info(f"Search TF-IDF index + semantic re-ranker ready ({len(cases)} cases).")
+
 
 # ---------------------------------------------------------------------------
-# Layer 2 — Authority Filter
+# Authority filter (research mode: SC/HC preferred)
 # ---------------------------------------------------------------------------
 
-def _authority_filter(cases: list[CaseRecord]) -> list[CaseRecord]:
+def _authority_filter(
+    scored: list[tuple[CaseRecord, float, dict]],
+) -> list[tuple[CaseRecord, float, dict]]:
     """
-    Prioritize higher courts. If enough SC + HC results exist,
-    exclude district court cases to reduce noise.
+    In research mode, if enough SC+HC results exist, deprioritize lower courts.
+    Cases are not dropped — lower courts are moved to the end.
     """
-    higher = [c for c in cases if get_authority_tier(c.court) <= 2]
+    higher  = [(c, s, b) for c, s, b in scored if get_authority_tier(c.court) <= 2]
+    lower   = [(c, s, b) for c, s, b in scored if get_authority_tier(c.court) >  2]
 
     if len(higher) >= AUTHORITY_MIN_HIGH_TIER:
-        return higher  # Enough authoritative results; skip lower courts
+        return higher + lower   # Higher courts first
 
-    return cases  # Not enough high-tier; keep everything
+    return scored   # Not enough authoritative results; keep original order
 
 
 # ---------------------------------------------------------------------------
-# User Filters (court, year range)
+# User filters
 # ---------------------------------------------------------------------------
 
-def _apply_filters(cases: list[CaseRecord], filters: SearchFilters | None) -> list[CaseRecord]:
+def _apply_filters(
+    scored: list[tuple[CaseRecord, float, dict]],
+    filters: SearchFilters | None,
+) -> list[tuple[CaseRecord, float, dict]]:
     if filters is None:
-        return cases
+        return scored
 
-    result = cases
+    result = scored
 
     if filters.court:
-        result = [c for c in result if c.court.lower() == filters.court.lower()]
+        result = [(c, s, b) for c, s, b in result
+                  if c.court.lower() == filters.court.lower()]
 
     if filters.year_start is not None:
-        result = [c for c in result if c.year >= filters.year_start]
+        result = [(c, s, b) for c, s, b in result if c.year >= filters.year_start]
 
     if filters.year_end is not None:
-        result = [c for c in result if c.year <= filters.year_end]
+        result = [(c, s, b) for c, s, b in result if c.year <= filters.year_end]
 
     return result
 
@@ -67,51 +92,48 @@ def _apply_filters(cases: list[CaseRecord], filters: SearchFilters | None) -> li
 def search_cases(query: str, filters: SearchFilters | None = None) -> SearchResponse:
     """
     Full search pipeline:
-        normalize → retrieve → authority filter → user filter → rank → cache → output
+        normalize → TF-IDF retrieve → authority filter → user filter
+        → semantic re-rank → cache → output
     """
 
-    # Layer 0: Normalize query
+    # Layer 0: Normalize
     normalized = normalize_query(query)
 
-    # Layer 6: Check query cache first
-    cache_key = normalized.search_string
+    # Build search string: original query + expanded synonyms
+    search_parts = [query] + (normalized.expanded_terms or [])
+    search_string = " ".join(search_parts)
+
+    # Cache key (skip cache when filters are active)
+    filters_hash = (
+        hashlib.md5(str(filters).encode()).hexdigest()[:6] if filters else "nofilter"
+    )
+    cache_key = f"search_tfidf:{normalized.search_string}:{filters_hash}"
     cached = cache.get_query(cache_key)
     if cached and filters is None:
         return cached
 
-    # Layer 1: Retrieve all cases
-    cases = get_all_cases()
+    # Layer 1: TF-IDF retrieval
+    _ensure_index()
+    index   = get_index()
+    scored  = index.search(search_string, top_n=100, min_score=0.005)
 
-    # Layer 2: Authority filter (reduce noise)
-    authoritative = _authority_filter(cases)
+    # Layer 2: Authority filter (research cares about court tier)
+    scored = _authority_filter(scored)
 
-    # Layer 3: Apply user filters
-    filtered = _apply_filters(authoritative, filters)
+    # Layer 3: User filters
+    scored = _apply_filters(scored, filters)
 
-    # Layer 4: Dual scoring (mode = "research")
-    tokens = normalized.expanded_terms or tokenize_query(query)
-    scored: list[tuple[CaseRecord, float, dict]] = []
-    for case in filtered:
-        score, breakdown = compute_score(case, tokens, mode="research")
-        scored.append((case, score, breakdown))
+    # Layer 4: Semantic re-ranking
+    # Re-ranker refines ordering using sentence embeddings.
+    # Falls back to TF-IDF order if model unavailable.
+    reranker = get_reranker()
+    scored   = reranker.rerank(query, scored, top_n=None)
 
-    scored.sort(key=lambda x: x[1], reverse=True)
+    # Keep only cases with a meaningful score
+    MIN_SCORE = 0.005
+    scored = [(c, s, b) for c, s, b in scored if b.get("tfidf_score", 0.0) >= MIN_SCORE]
 
-    # Layer 4b: Relevance-aware reranking
-    # Separate cases with meaningful relevance from authority-only cases.
-    # This prevents irrelevant landmark cases (high authority, 0 relevance)
-    # from pushing genuinely relevant cases out of the top results.
-    RESEARCH_RELEVANCE_MIN = 5.0
-    relevant = [(c, s, b) for c, s, b in scored if b.get("relevance_score", 0) >= RESEARCH_RELEVANCE_MIN]
-    authority_only = [(c, s, b) for c, s, b in scored if b.get("relevance_score", 0) < RESEARCH_RELEVANCE_MIN]
-
-    # Show relevant cases first, then backfill with authority-only cases
-    scored = relevant + authority_only
-
-    # Layer 4c: Relevance threshold — hide cases with near-zero relevance
-    scored = [(c, s, b) for c, s, b in scored if b.get("relevance_score", 0) >= RELEVANCE_THRESHOLD]
-
-    # Layer 7: Build structured output
+    # Layer 5: Build output
     top_cases: list[CaseResult] = []
     for case, score, bd in scored:
         top_cases.append(CaseResult(
@@ -120,7 +142,7 @@ def search_cases(query: str, filters: SearchFilters | None = None) -> SearchResp
             court=case.court,
             year=case.year,
             citation_count=case.citation_count,
-            strength_score=score,
+            strength_score=round(score, 4),
             authority_score=bd.get("authority_score", 0.0),
             relevance_score=bd.get("relevance_score", 0.0),
             summary=case.summary,
@@ -134,7 +156,6 @@ def search_cases(query: str, filters: SearchFilters | None = None) -> SearchResp
         most_influential_case=most_influential,
     )
 
-    # Layer 6: Cache the result
     if filters is None:
         cache.set_query(cache_key, response)
 
