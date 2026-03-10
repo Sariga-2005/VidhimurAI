@@ -132,9 +132,9 @@ def _compute_legal_strength(precedents: list[CaseResult]) -> str:
     """
     Heuristic based on TF-IDF relevance (0–1 scale) and court authority.
 
-    Thresholds are tuned for cosine similarity output:
-      Strong   : avg_tfidf > 0.15 AND ≥1 Supreme Court OR ≥2 High Court cases
-      Moderate : avg_tfidf > 0.04
+    Thresholds are tuned for a ~2000 case corpus:
+      Strong   : avg_tfidf > 0.10 AND ≥1 Supreme Court OR ≥2 High Court cases
+      Moderate : avg_tfidf > 0.03
       Weak     : everything else
     """
     if not precedents:
@@ -146,9 +146,9 @@ def _compute_legal_strength(precedents: list[CaseResult]) -> str:
     supreme_count = sum(1 for p in precedents if get_authority_tier(p.court) == 1)
     high_count    = sum(1 for p in precedents if get_authority_tier(p.court) == 2)
 
-    if avg_tfidf > 0.15 and (supreme_count >= 1 or high_count >= 2):
+    if avg_tfidf > 0.10 and (supreme_count >= 1 or high_count >= 2):
         return "Strong"
-    if avg_tfidf > 0.04:
+    if avg_tfidf > 0.03:
         return "Moderate"
     return "Weak"
 
