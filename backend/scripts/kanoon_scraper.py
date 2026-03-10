@@ -6,26 +6,46 @@ import re
 import random
 from pathlib import Path
 
+TARGET_COUNT = 2000
+
 # --- Configuration ---
-DATA_DIR = Path("backend/app/data")
+DATA_DIR = Path("app/data")
 OUTPUT_FILE = DATA_DIR / "kanoon_raw.json"
-TARGET_COUNT = 500
 
 QUERIES = [
-    "landlord eviction",
-    "wrongful termination",
-    "medical negligence",
-    "cyber crime hacking",
-    "domestic violence protection order",
-    "fundamental rights article 21",
-    "security deposit refund",
-    "consumer complaint defective product",
-    "environmental pollution NGT",
-    "divorce alimony custody",
-    "bail application criminal",
-    "cheating fraud forgery",
-    "negotiable instruments act section 138",
-    "writ petition motor vehicle accident"
+    # Family Law
+    "divorce mutual consent alimony",
+    "child custody child welfare",
+    "domestic violence protection officer",
+    "dowry harassment section 498a",
+    
+    # Property & Real Estate
+    "rera delayed possession builder",
+    "tenant eviction rent control act",
+    "property dispute partition suit",
+    "illegal construction demolition order",
+    
+    # Employment & Labor
+    "wrongful termination back wages",
+    "provident fund withdrawal delay",
+    "maternity benefit act denial",
+    "workmen compensation factory injury",
+    
+    # Consumer & Finance
+    "medical negligence consumer forum",
+    "cheque bounce section 138 ni act",
+    "credit card fraud banking ombudsman",
+    "insurance claim rejection vehicle",
+    
+    # Cyber & Digital
+    "cyber fraud online scam",
+    "data theft information technology act",
+    "defamation social media injunction",
+    
+    # Civil Rights & Criminal
+    "police harassment false fir",
+    "anticipatory bail 438 crpc",
+    "right to information rti act penalty"
 ]
 
 HEADERS = {
@@ -46,6 +66,15 @@ def parse_date(title_text):
 def scrape_kanoon():
     dataset = []
     seen_ids = set()
+
+    if OUTPUT_FILE.exists():
+        with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+            try:
+                dataset = json.load(f)
+                seen_ids = {c["tid"] for c in dataset}
+                print(f"Loaded {len(dataset)} existing cases from {OUTPUT_FILE}")
+            except Exception:
+                pass
 
     for query in QUERIES:
         if len(dataset) >= TARGET_COUNT:
@@ -140,6 +169,10 @@ def scrape_kanoon():
                         })
                         seen_ids.add(tid)
                         
+                        # Incremental save
+                        with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+                            json.dump(dataset, f, indent=4)
+
                         if len(dataset) >= TARGET_COUNT:
                             break
                             

@@ -233,7 +233,6 @@ def analyze_empowerment(query: str, context: str | None = None) -> EmpowerRespon
         if top_precedents else 0.0
     )
     if avg_tfidf < 0.02:
-        issue_type    = "General Legal Issue"
         legal_strength = "Weak"
 
     # (b) General Legal Issue should never be Moderate/Strong —
